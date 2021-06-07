@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}
+    Question list
+{% endblock %}
+{% block head %}
+{% endblock %}
+{% block body %}
+    <script>
+        let styleWord = function (target, word) {
+            let html = target.innerHTML;
+            html = html.replace(new RegExp(word, "g"), '<span class="styled">' + word + '</span>');
+            target.innerHTML = html;
+        };
+        styleWord(document.getElementById("styled"), "How");
+    </script>
+
+    <!--suppress HtmlUnknownTarget -->
+    <form action='/list' method="get">
+        <p>Sort by:</p>
+        <p>
+            <label for="sort_column"></label>
+            <input type="radio" id="sort_column" name="sort_column" value="title" required/> title
+            <input type="radio" id="sort_column" name="sort_column" value="submission_time" required/> submission time
+            <input type="radio" id="sort_column" name="sort_column" value="message" required/> message
+            <input type="radio" id="sort_column" name="sort_column" value="view_number" required/> number of views
+            <input type="radio" id="sort_column" name="sort_column" value="vote_number" required/> number of votes
+        </p>
+        <p>
+            <label for="sort_method"></label>
+            <input type="radio" id="sort_method" name="sort_method" value="ascending" required/> ascending
+            <input type="radio" id="sort_method" name="sort_method" value="descending" required/> descending
+        </p>
+        <p>
+            <input type="submit" id="sort_submit" name="sort_submit" value="sort"/>
+        </p>
+    </form>
+    <!--suppress HtmlUnknownTarget -->
+    <form action='/search' method="get">
+        <label>
+            <textarea name="search_phrase" rows="1" cols="40" autofocus></textarea>
+        </label>
+        <p>
+            <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
+        </p>
+    </form>
+    {% if search_questions != [] %}
+        {#            <div id="highlight" onload='styleWord(document.getElementById("highlight"), "How")'>#}
+        <div id="styled>">
+        <table>
+        {% for header in headers %}
+            <th>{{ header.upper().replace('_', ' ') }}</th>
+        {% endfor %}
+        {% for question in search_questions %}
+            <tr>
+                {% for key in question.keys() %}
+                    <td>
+                        {% if key == 'image' %}
+                            <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
+                        {% endif %}
+
+                        {{ question[key] }}
+
+                        {% if key == 'vote_number' %}
+                            <!--suppress HtmlUnknownTarget -->
+                            <form action='/list' method="POST">
+                                <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
+                                <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><br><br><br>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+<p></p>
+{% if search_answers != [] %}
+    {% if search_questions == [] %}
+        {% for header in headers %}
+            <th>{{ header.upper().replace('_', ' ') }}</th>
+        {% endfor %}
+    {% endif %}
+    <tr>
+        <td colspan="4">PHRASE FOUND IN ANSWERS:</td>
+    </tr>
+    {% for question in search_questions_from_answers %}
+        <tr>
+            {% for key in question.keys() %}
+                <td>
+                    {% if key == 'image' %}
+                        <img src="/static/{{ question['image'] }}" alt="" width=300>
+                    {% endif %}
+                    {{ question[key] }}
+
+                    {% if key == 'vote_number' %}
+                        <!--suppress HtmlUnknownTarget -->
+                        <form action='/list' method="POST">
+                            <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
+                            <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                        </form>
+                    {% endif %}
+                </td>
+
+            {% endfor %}
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><BR><br><br>
+            </td>
+        </tr>
+        <td>
+        <td></td>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="5">
+                <table>
+                    <th>ID</th>
+                    <th>SUBMISSION TIME</th>
+                    <th>VOTES</th>
+                    <th>MESSAGE</th>
+                    <th>IMAGE</th>
+                    {% for answer in search_answers %}
+                        {% if answer['question_id'] == question['id'] %}
+                            <tr>
+                                <td>
+                                    {{ answer['id'] }}
+                                </td>
+                                <td>
+                                    {{ answer['submission_time'] }}
+                                </td>
+                                <td>
+                                    {{ answer['vote_number'] }}
+                                </td>
+                                <td>
+                                    {{ answer['message'] }}
+                                </td>
+                                <td>
+                                    {{ answer['image'] }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+    </table></div>
+    {#        </div>#}
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

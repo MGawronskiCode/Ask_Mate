@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Main Page
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>AskMate</h1>
+    <!--suppress HtmlUnknownTarget -->
+    <form action='/search' method="get">
+        <label>
+            <textarea name="search_phrase" rows="1" cols="40" autofocus></textarea>
+        </label>
+        <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
+    </form>
+    <p><a href="{{ url_for('list_questions') }}">Show all questions list</a></p>
+    <p><a href="{{ url_for('add_question') }}">Add new question</a></p>
+    <h2>Latest questions:</h2>
+
+    <table>
+        {% for header in headers %}
+            <th>{{ header.upper().replace('', ' ') }}</th>
+        {% endfor %}
+        {% for question in user_questions %}
+            <tr>
+                {% for key in question.keys() %}
+                    <td>
+                        {% if key == 'image' %}
+                            <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
+                        {% endif %}
+                        {{ question[key] }}
+                        {% if key == 'vote_number' %}
+                            <!--suppress HtmlUnknownTarget -->
+                            <form action='/list' method="POST">
+                                <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
+                                <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {#            todo: merge cells#}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><BR><br><br>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

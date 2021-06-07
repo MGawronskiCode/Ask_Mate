@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit answer{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <form action="/answer/{{ answer_id }}/edit" method="POST">
+        <textarea name=message>{{ message }}</textarea>
+        <p>
+            <button type="submit" name="save_cancel_button" value="save">Save</button>
+        </p>
+        <p>
+            <button type="submit" name="save_cancel_button" value="cancel">Cancel</button>
+        </p>
+
+    </form>
+
+{% endblock body %}
+
+{% block footer %}
+
+{% endblock %}
