@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add tag
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>Question:</h1>
+    <h3>{{ question_title }}</h3>
+    <h4>{{ question_message }}</h4>
+
+    <h2>Add new tag:</h2>
+    <form action="/question/{{ question_id }}/new-tag" method="GET" enctype="multipart/form-data">
+        <p>Choose a tag from the list or write the new one:</p>
+        {#    todo: in js when new tag not choosen, text inpuf frame hidden#}
+        <p><select name="old_tag">
+            <option>new tag</option>
+            {% for tag in tags %}
+                <option>
+                    {{ tag }}
+                </option>
+            {% endfor %}
+        </select></p>
+        <p><label for="new_tag"></label><input type="text" name="new_tag" cols="50" id="new_tag" autofocus/></p>
+        <p><input type="submit" value="Add tag"></p>
+    </form>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

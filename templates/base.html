@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='/styles/main.css') }}">
+    <title>{% block title %}{% endblock %}- AskMate</title>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+{#<header class="center-text">#}
+{#            <a class="logo" href="new_index.html"><i class="fas fa-hamburger logo-icon"></i> AskMate</a>#}
+{#        </header>#}
+<div id="body">
+    {% block body %}
+    {% endblock %}
+    <p><a href="/">Back to the main page</a></p>
+</div>
+<div id="footer">
+    {% block footer %}
+    {% endblock %}
+    <p>AskMate</p>
+</div>
+</body>
+</html>

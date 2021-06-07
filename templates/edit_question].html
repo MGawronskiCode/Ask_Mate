@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {% block title %}Edit question{% endblock %}
+</head>
+<body>
+{% block body %}
+    <h2>Edit your question:</h2>
+    <form action="/question/{{ question_id }}/edit" method="post">
+        <p><label>
+            <textarea name="title" id="title" cols="50" autofocus>{{ title }}</textarea>
+        </label></p>
+        <p><label>
+            <textarea name="message">{{ message }}</textarea>
+        </label></p>
+        <p><input type="submit" value="Save"></p>
+        <p><input type="submit" value="Cancel"></p>
+    </form>
+{% endblock %}
+</body>
+</html>
