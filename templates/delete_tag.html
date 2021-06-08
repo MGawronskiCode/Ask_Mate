@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    delete tag
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <h3>{{ question['title'] }}</h3>
+    <h4>{{ question['message'] }}</h4>
+
+    <form action="/question/{{ question['id'] }}/delete-tag" method="POST" enctype="multipart/form-data">
+        <p>Choose a tag to delete from the list:</p>
+        <p><select name="tag_to_delete" required>
+            {% for tag in tags %}
+                <option>
+                    {{ tag }}
+                </option>
+            {% endfor %}
+        </select></p>
+        <p><input type="submit" value="Delete tag"></p>
+    </form>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

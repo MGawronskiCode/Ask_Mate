@@ -219,6 +219,18 @@ def edit_answer(answer_id):
         return render_template('edit_answer.html', answer_id=answer_id, message=message)
 
 
+@app.route("/question/<question_id>/delete-tag", methods=['GET', 'POST'])
+def delete_tag(question_id):
+    all_question_data = data_handler.get_question(question_id)[0]
+    tags = data_handler.get_question_tags(question_id)
+
+    if request.method == 'POST':
+        tag_to_delete = request.form['tag_to_delete']
+        data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('delete_tag.html', question=all_question_data, tags=tags)
+
+
 @app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
 def add_tag(question_id):
     all_question_data = data_handler.get_question(question_id)[0]
@@ -231,17 +243,15 @@ def add_tag(question_id):
         if request.form['old_tag'] == 'new tag' and request.form['new_tag'] != '':
             data_handler.add_tag(request.form['new_tag'])
             data_handler.add_tag_to_question(request.form['new_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
         elif request.form['old_tag'] == 'new tag' and request.form['new_tag'] == '':
             # flash('Please provide new tag name or choose from the list')
             pass
         else:
             data_handler.add_tag(request.form['old_tag'])
             data_handler.add_tag_to_question(request.form['old_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
-
-    return render_template('add_tag.html', question_id=question_id, question_title=all_question_data['title'],
-                           question_message=all_question_data['message'], tags=tag_names)
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('add_tag.html', question_id=question_id,
+                           question=all_question_data, tags=tag_names)
 
 
 @app.route("/search", methods=['POST', 'GET'])

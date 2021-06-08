@@ -16,7 +16,6 @@
 
     <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
     <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
-    <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
     <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
 
 
@@ -26,6 +25,8 @@
             {{ tag }}
         {% endfor %}
     {% endif %}</p>
+    <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
+    <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
     <th><strong>
         Comment Section
     </strong></th>
