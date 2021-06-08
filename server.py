@@ -77,7 +77,7 @@ def add_question():
 def delete_question(question_id):
     if request.method == "POST":
         if request.form["you_sure_button"] == "Yes":
-            # TODO delete all comments to answers
+            
             # TODO delete all answers
             # TODO delete all comments to question
             data_handler.delete_question(question_id)
