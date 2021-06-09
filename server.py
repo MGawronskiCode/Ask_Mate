@@ -195,7 +195,6 @@ def delete_answer(answer_id):
     else:
 
         if request.form["you_sure_button"] == "Yes":
-            # TODO delete all comments for answer
             data_handler.delete_answer(answer_id)
             return redirect(url_for("show_question", question_id=question_id))
 
