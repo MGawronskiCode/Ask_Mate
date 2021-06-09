@@ -227,7 +227,7 @@ def delete_tag(question_id):
     if request.method == 'POST':
         tag_to_delete = request.form['tag_to_delete']
         data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
-        # todo: info to user about deleting succes
+        # todo: info to user about deleting success
         return redirect(url_for("show_question", question_id=question_id))
     return render_template('delete_tag.html', question=all_question_data, tags=tags)
 
