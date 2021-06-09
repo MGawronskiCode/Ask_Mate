@@ -71,7 +71,7 @@ def add_question():
         question_id = data_handler.add_question(question_data)
         return redirect(url_for("show_question", question_id=question_id))
     else:
-        return render_template("new_add_question.html")
+        return render_template("add_question.html")
 
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
@@ -89,7 +89,7 @@ def delete_question(question_id):
             return redirect(url_for("show_question", question_id=question_id))
 
     else:
-        return render_template("new_delete.html", question_id=question_id)
+        return render_template("delete.html", question_id=question_id)
 
 
 @app.route('/list', methods=["POST", "GET"])
@@ -103,7 +103,7 @@ def list_questions():
 
     user_questions = data_handler.sort_questions(sort_column, sort_method)
 
-    return render_template('new_list.html', search_questions=user_questions, search_answers=[],
+    return render_template('question_list.html', search_questions=user_questions, search_answers=[],
                            headers=data_handler.QUESTIONS_DATA_HEADERS)
 
 
@@ -140,7 +140,7 @@ def show_question(question_id):
     answer_comments = data_handler.sql_get_answer_comments(answer_id)
     question_tags = data_handler.get_question_tags(question_id)
 
-    return render_template('new_question.html', question=full_data_question, answers=answers,
+    return render_template('show_question.html', question=full_data_question, answers=answers,
                            headers=data_handler.ANSWERS_DATA_HEADERS, question_comments=question_comments,
                            comment_id=comment_id, answer_comments=answer_comments, id=question_id, tags=question_tags)
 
@@ -169,7 +169,7 @@ def edit_question(question_id):
         question_to_edit = dict(data_handler.get_question(question_id)[0])
         title = question_to_edit["title"]
         message = question_to_edit["message"]
-        return render_template("new_edit_question.html", question_id=question_id, title=title, message=message)
+        return render_template("edit_question].html", question_id=question_id, title=title, message=message)
 
 
 @app.route('/list/<question_id>/new-answer', methods=["GET", "POST"])
@@ -182,7 +182,7 @@ def add_answer(question_id):
         data_handler.add_answer(question_id, message)
         return redirect(url_for("show_question", question_id=question_id))
 
-    return render_template('new_add_answer.html', question_id=question_id, question=question)
+    return render_template('add_answer.html', question_id=question_id, question=question)
 
 
 @app.route('/answer/<answer_id>/delete', methods=["GET", "POST"])
@@ -191,7 +191,7 @@ def delete_answer(answer_id):
     question_id = answer['question_id']
 
     if request.method != "POST":
-        return render_template("new_delete.html", answer_id=answer_id)
+        return render_template("delete.html", answer_id=answer_id)
     else:
 
         if request.form["you_sure_button"] == "Yes":
@@ -216,7 +216,20 @@ def edit_answer(answer_id):
         return redirect(url_for("show_question", question_id=question_id))
     else:
         message = answer_to_edit["message"]
-        return render_template('new_edit_answer.html', answer_id=answer_id, message=message)
+        return render_template('edit_answer.html', answer_id=answer_id, message=message)
+
+
+@app.route("/question/<question_id>/delete-tag", methods=['GET', 'POST'])
+def delete_tag(question_id):
+    all_question_data = data_handler.get_question(question_id)[0]
+    tags = data_handler.get_question_tags(question_id)
+
+    if request.method == 'POST':
+        tag_to_delete = request.form['tag_to_delete']
+        data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
+        # todo: info to user about deleting succes
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('delete_tag.html', question=all_question_data, tags=tags)
 
 
 @app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
@@ -231,40 +244,38 @@ def add_tag(question_id):
         if request.form['old_tag'] == 'new tag' and request.form['new_tag'] != '':
             data_handler.add_tag(request.form['new_tag'])
             data_handler.add_tag_to_question(request.form['new_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
         elif request.form['old_tag'] == 'new tag' and request.form['new_tag'] == '':
             # flash('Please provide new tag name or choose from the list')
             pass
         else:
             data_handler.add_tag(request.form['old_tag'])
             data_handler.add_tag_to_question(request.form['old_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
-
-    return render_template('new_add_tag.html', question_id=question_id, question_title=all_question_data['title'],
-                           question_message=all_question_data['message'], tags=tag_names)
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('add_tag.html', question_id=question_id,
+                           question=all_question_data, tags=tag_names)
 
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
     search_questions = data_handler.get_questions()
-    search_answers = []
+    # search_answers = []
 
     if request.args is not None:
         search_phrase = dict(request.args)['search_phrase']
         if search_phrase == '':
-            return render_template('new_list.html', search_questions=search_questions, search_answers=[],
+            return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                                    headers=data_handler.QUESTIONS_DATA_HEADERS)
 
         search_questions = data_handler.search_questions(search_phrase)
         search_answers = data_handler.search_answers(search_phrase)
 
         if not search_questions and not search_answers:
-            return render_template('new_list.html', search_questions=[], search_answers=[],
+            return render_template('question_list.html', search_questions=[], search_answers=[],
                                    headers=['no results found'])
         else:
             search_questions_id_from_answers = []
             search_questions_from_answers = []
-            search_question_from_answers_id = []
+            # search_question_from_answers_id = []
             for answer in search_answers:
                 search_questions_id_from_answers.append(data_handler.get_answer_question_id(answer['id']))
                 for i in range(len(search_questions_id_from_answers)):
@@ -278,12 +289,12 @@ def search():
                     search_questions_from_answers_no_duplicates.append(question[0])
                     added_questions_id.append(question[0]['id'])
 
-            return render_template('new_list.html', search_questions=search_questions,
+            return render_template('question_list.html', search_questions=search_questions,
                                    search_questions_from_answers=search_questions_from_answers_no_duplicates,
                                    search_answers=search_answers, headers=data_handler.QUESTIONS_DATA_HEADERS,
                                    answer_headers=data_handler.ANSWERS_DATA_HEADERS)
 
-    return render_template('new_list.html', search_questions=search_questions, search_answers=[],
+    return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                            headers=data_handler.QUESTIONS_DATA_HEADERS)
 
 
@@ -295,7 +306,7 @@ def add_question_comment(question_id):
     if request.method == 'POST':
         data_handler.sql_add_question_comment(question_id)
         return redirect(url_for("show_question", question_id=question_id))
-    return render_template('new_comment.html', question_id=question_id, question=question)
+    return render_template('add_comment.html', question_id=question_id, question=question)
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=["GET", "POST"])
@@ -307,7 +318,7 @@ def add_answer_comment(answer_id):
     if request.method == 'POST':
         data_handler.sql_add_answer_comment(answer_id)
         return redirect(url_for("show_question", question_id=question_id))
-    return render_template('new_answer_comment.html', answer_id=answer_id, answer=answer, question_id=question_id)
+    return render_template('add_answer_comment.html', answer_id=answer_id, answer=answer, question_id=question_id)
 
 
 @app.route('/comment/<comment_id>/edit', methods=["GET", "POST"])

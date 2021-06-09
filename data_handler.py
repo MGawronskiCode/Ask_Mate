@@ -249,7 +249,7 @@ def get_tags(cursor):
 
 
 @connection.connection_handler
-def get_tag(cursor, tag_name: str):
+def get_tag_by_name(cursor, tag_name: str):
     query = f"""
         SELECT DISTINCT *
         FROM tag
@@ -257,7 +257,7 @@ def get_tag(cursor, tag_name: str):
     """
     query_params = [tag_name]
     cursor.execute(query, query_params)
-    x = cursor.fetchall()
+
     return cursor.fetchall()
 
 
@@ -274,17 +274,17 @@ def get_tag(cursor, tag: dict):
     return cursor.fetchall()
 
 
-# @connection.connection_handler
-# def get_question_tags(cursor, question_id):
-#     query = f"""
-#             SELECT *
-#             FROM question_tag
-#             WHERE question_id = %s
-#         """
-#     query_params = [question_id]
-#     cursor.execute(query, query_params)
-#
-#     return cursor.fetchall()
+@connection.connection_handler
+def get_question_tags(cursor, question_id):
+    query = f"""
+            SELECT *
+            FROM question_tag
+            WHERE question_id = %s
+        """
+    query_params = [question_id]
+    cursor.execute(query, query_params)
+
+    return cursor.fetchall()
 
 
 @connection.connection_handler
@@ -446,3 +446,18 @@ def sql_get_question_comments(cursor, question_id):
     query_params = (question_id,)
     cursor.execute(query, query_params)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def delete_tag_from_question(cursor, question_id, tag_to_delete):
+    tag = get_tag_by_name(tag_to_delete)[0]
+    query = f'''
+            WITH deleting_function AS (
+                DELETE FROM question_tag
+                WHERE question_id = %s AND tag_id = %s
+                RETURNING *)
+            INSERT INTO deleted_tag
+            SELECT * FROM deleting_function;
+        '''
+    query_params = [question_id, tag['id']]
+    cursor.execute(query, query_params)
