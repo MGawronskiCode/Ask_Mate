@@ -42,7 +42,7 @@ def main_page():
     for i in range(5):
         last_questions.append(dict(user_questions[i]))
 
-    return render_template('new_index.html', user_questions=last_questions, headers=data_handler.QUESTIONS_DATA_HEADERS)
+    return render_template('index.html', user_questions=last_questions, headers=data_handler.QUESTIONS_DATA_HEADERS)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
