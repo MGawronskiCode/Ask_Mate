@@ -34,6 +34,7 @@ def file_extension_acceptable(filename: str) -> bool:
 
 @app.route("/")
 def main_page():
+    #TODO how to merge???
     sort_column = 'id'
     sort_method = 'descending'
     user_questions = data_handler.sort_questions(sort_column, sort_method)
