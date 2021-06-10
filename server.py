@@ -367,17 +367,17 @@ def register():
     if request.method == 'POST':
         username = request.form['login']
         if data_handler.check_if_username_exist(username):
-            # todo:communicate user exist
+            # todo: communicate user exist
             return redirect('login')
         else:
             password = request.form['password']
             password_confirm = request.form['password_confirm']
             if password != password_confirm:
-                #     message wrong password
+                # todo: message wrong password
                 return redirect('register')
             # todo: confirm email
             data_handler.add_new_user(username, password)
-            # comunicate added
+            # todo: communicate added
             return redirect('login')
 
     return render_template('register.html')
@@ -386,6 +386,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        username = request.form['login']
         password = request.form['password']
     #       if check if the usrnme&pass correct:
     #           message about corect loging in

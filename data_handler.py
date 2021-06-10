@@ -494,7 +494,6 @@ def check_user_login(cursor, username, password):
 @connection.connection_handler
 def add_new_user(cursor, username, password):
     password_hash = str(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))[2:-1]
-    x = password_hash[2:-1]
     query = """
         INSERT INTO "user" (username, password) 
         VALUES (%s, %s)
@@ -506,7 +505,6 @@ def add_new_user(cursor, username, password):
 
 # def make_password_hash(password):
 #     return bcrypt.hashpw(password, bcrypt.gensalt())
-#
 #
 # password = b'123'
 # hashed = make_password_hash(password)
