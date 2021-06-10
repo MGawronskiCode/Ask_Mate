@@ -149,31 +149,61 @@ def increase_question_views(cursor, question_id):
 
 @connection.connection_handler
 def delete_question(cursor, question_id):
-    query = ''' WITH deleting_func AS (
-    DELETE FROM question
-          WHERE id = %s
-      RETURNING *)
 
-INSERT INTO deleted_question
-            SELECT * FROM deleting_func;
 
-    '''
+    cursor.execute(delete_answers_comments(question_id))
+    cursor.execute(delete_question_answers(question_id))
+    cursor.execute(delete_question_comments(question_id))
+
+    query1 = "delete from question where id = %s "
     query_params = [question_id]
-    cursor.execute(query, query_params)
+    cursor.execute(query1, query_params)
 
+
+
+#     query = ''' WITH deleting_func AS (
+#     DELETE FROM question
+#           WHERE id = %s
+#       RETURNING *)
+#
+# INSERT INTO deleted_question
+#             SELECT * FROM deleting_func;
+#
+#     '''
+
+# def get_answer_ids(cursor, question_id):
+#     query = "select id from answer where question_id = question_id"
+#     cursor.execute(query)
+#     return cursor.fetchall()
+
+def delete_answers_comments(question_id):
+
+    query = "delete from comment where answer_id in(select id from answer where question_id = question_id) "
+    return query
+
+def delete_question_answers(question_id):
+    query = "delete from answer where question_id = question_id"
+    return query
+
+def delete_question_comments(question_id):
+    query = "delete from comment where question_id = question_id"
+    return query
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
-    query = '''with deleting_function as (
-    delete from answer
-    where id = %s
-    returning *)
-    insert into deleted_answer
-    select * from deleting_function
-    '''
+    query1 = "delete from comment where answer_id = %s"
+    query2 = "delete from answer where id = %s"
+    # query = '''with deleting_function as (
+    # delete from answer
+    # where id = %s
+    # returning *)
+    # insert into deleted_answer
+    # select * from deleting_function
+    # '''
 
     query_params = [answer_id]
-    cursor.execute(query, query_params)
+    cursor.execute(query1,query_params)
+    cursor.execute(query2, query_params)
 
 
 def get_submission_time():
@@ -222,7 +252,7 @@ def get_tags(cursor):
 
 
 @connection.connection_handler
-def get_tag(cursor, tag_name: str):
+def get_tag_by_name(cursor, tag_name: str):
     query = f"""
         SELECT DISTINCT *
         FROM tag
@@ -230,7 +260,7 @@ def get_tag(cursor, tag_name: str):
     """
     query_params = [tag_name]
     cursor.execute(query, query_params)
-    x = cursor.fetchall()
+
     return cursor.fetchall()
 
 
@@ -247,17 +277,17 @@ def get_tag(cursor, tag: dict):
     return cursor.fetchall()
 
 
-# @connection.connection_handler
-# def get_question_tags(cursor, question_id):
-#     query = f"""
-#             SELECT *
-#             FROM question_tag
-#             WHERE question_id = %s
-#         """
-#     query_params = [question_id]
-#     cursor.execute(query, query_params)
-#
-#     return cursor.fetchall()
+@connection.connection_handler
+def get_question_tags(cursor, question_id):
+    query = f"""
+            SELECT *
+            FROM question_tag
+            WHERE question_id = %s
+        """
+    query_params = [question_id]
+    cursor.execute(query, query_params)
+
+    return cursor.fetchall()
 
 
 @connection.connection_handler
@@ -299,10 +329,10 @@ def add_tag(cursor, tag_name):
 
 @connection.connection_handler
 def add_tag_to_question(cursor, tag_name, question_id):
-    question_tags_id = get_question_tags(question_id)
+    question_tags_names = get_question_tags(question_id)
     question_tags = []
-    for tag_id in question_tags_id:
-        question_tags.append(get_tag(tag_id)[0])
+    for tag_name in question_tags_names:
+        question_tags.append(get_tag_by_name(tag_name)[0])
     question_tags_names = []
     for question_tag in question_tags:
         if question_tag['name'] not in question_tags_names:
@@ -419,3 +449,18 @@ def sql_get_question_comments(cursor, question_id):
     query_params = (question_id,)
     cursor.execute(query, query_params)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def delete_tag_from_question(cursor, question_id, tag_to_delete):
+    tag = get_tag_by_name(tag_to_delete)[0]
+    query = f'''
+            WITH deleting_function AS (
+                DELETE FROM question_tag
+                WHERE question_id = %s AND tag_id = %s
+                RETURNING *)
+            INSERT INTO deleted_tag
+            SELECT * FROM deleting_function;
+        '''
+    query_params = [question_id, tag['id']]
+    cursor.execute(query, query_params)
