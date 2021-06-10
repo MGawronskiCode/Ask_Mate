@@ -151,10 +151,14 @@ def increase_question_views(cursor, question_id):
 def delete_question(cursor, question_id):
 
 
-    query1 = delete_answers_comments(question_id)
-    query2 = delete_question_answers(question_id)
-    query3 = delete_question_comments(question_id)
-    query4 = "delete from question where id = %s"
+    cursor.execute(delete_answers_comments(question_id))
+    cursor.execute(delete_question_answers(question_id))
+    cursor.execute(delete_question_comments(question_id))
+
+    query1 = "delete from question where id = %s "
+    query_params = [question_id]
+    cursor.execute(query1, query_params)
+
 
 
 #     query = ''' WITH deleting_func AS (
@@ -166,8 +170,6 @@ def delete_question(cursor, question_id):
 #             SELECT * FROM deleting_func;
 #
 #     '''
-    query_params = [question_id]
-    cursor.execute(query1,query2, query3, query4, query_params)
 
 # def get_answer_ids(cursor, question_id):
 #     query = "select id from answer where question_id = question_id"
@@ -200,7 +202,8 @@ def delete_answer(cursor, answer_id):
     # '''
 
     query_params = [answer_id]
-    cursor.execute(query1,query2, query_params)
+    cursor.execute(query1,query_params)
+    cursor.execute(query2, query_params)
 
 
 def get_submission_time():
