@@ -48,6 +48,7 @@
         <div id="styled>">
         <table>
         {% for header in headers %}
+            {#            todo:replace not working?#}
             <th>{{ header.upper().replace('_', ' ') }}</th>
         {% endfor %}
         {% for question in search_questions %}

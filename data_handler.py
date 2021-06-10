@@ -329,10 +329,10 @@ def add_tag(cursor, tag_name):
 
 @connection.connection_handler
 def add_tag_to_question(cursor, tag_name, question_id):
-    question_tags_id = get_question_tags(question_id)
+    question_tags_names = get_question_tags(question_id)
     question_tags = []
-    for tag_id in question_tags_id:
-        question_tags.append(get_tag(tag_id)[0])
+    for tag_name in question_tags_names:
+        question_tags.append(get_tag_by_name(tag_name)[0])
     question_tags_names = []
     for question_tag in question_tags:
         if question_tag['name'] not in question_tags_names:
