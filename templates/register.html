@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <form action="/register" method="POST" enctype="multipart/form-data">
+        <p><label>
+            <input type="email" name="login" autofocus required>
+        </label></p>
+        <p><label>
+            <input type="password" name="password" required>
+        </label></p>
+        <p><label>
+            <input type="password" name="password_confirm" required>
+        </label></p>
+        <p><input type="submit" value="register"></p>
+    </form>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -358,5 +358,44 @@ def delete_comment(comment_id):
             return redirect(url_for("show_question", question_id=question_id))
 
 
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    # if already_logged:
+    # communicate
+    #     return redirect (url_for('main_page'))
+
+    if request.method == 'POST':
+        username = request.form['login']
+        if data_handler.check_if_username_exist(username):
+            # todo:communicate user exist
+            return redirect('login')
+        else:
+            password = request.form['password']
+            password_confirm = request.form['password_confirm']
+            if password != password_confirm:
+                #     message wrong password
+                return redirect('register')
+            # todo: confirm email
+            data_handler.add_new_user(username, password)
+            # comunicate added
+            return redirect('login')
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        password = request.form['password']
+    #       if check if the usrnme&pass correct:
+    #           message about corect loging in
+    #           return redirect(url_for('main_page'))
+    #       else:
+    #           message wrong login/password
+    #           return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
