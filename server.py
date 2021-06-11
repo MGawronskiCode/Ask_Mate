@@ -5,7 +5,7 @@ from flask import (
     render_template,
     request,
     redirect,
-    url_for
+    url_for, flash
 )
 from werkzeug.utils import secure_filename
 
@@ -17,6 +17,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 VOTE_TYPES = {'upvote': 1, 'downvote': -1}
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # maksymalny akceptowany rozmiar pliku: 8mb
 
@@ -71,7 +72,7 @@ def add_question():
         question_id = data_handler.add_question(question_data)
         return redirect(url_for("show_question", question_id=question_id))
     else:
-        return render_template("new_add_question.html")
+        return render_template("add_question.html")
 
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
@@ -79,8 +80,6 @@ def delete_question(question_id):
     if request.method == "POST":
         if request.form["you_sure_button"] == "Yes":
             
-            # TODO delete all answers
-            # TODO delete all comments to question
             data_handler.delete_question(question_id)
 
             return redirect(url_for("list_questions"))
@@ -89,7 +88,7 @@ def delete_question(question_id):
             return redirect(url_for("show_question", question_id=question_id))
 
     else:
-        return render_template("new_delete.html", question_id=question_id)
+        return render_template("delete.html", question_id=question_id)
 
 
 @app.route('/list', methods=["POST", "GET"])
@@ -103,7 +102,7 @@ def list_questions():
 
     user_questions = data_handler.sort_questions(sort_column, sort_method)
 
-    return render_template('new_list.html', search_questions=user_questions, search_answers=[],
+    return render_template('question_list.html', search_questions=user_questions, search_answers=[],
                            headers=data_handler.QUESTIONS_DATA_HEADERS)
 
 
@@ -140,7 +139,7 @@ def show_question(question_id):
     answer_comments = data_handler.sql_get_answer_comments(answer_id)
     question_tags = data_handler.get_question_tags(question_id)
 
-    return render_template('new_question.html', question=full_data_question, answers=answers,
+    return render_template('show_question.html', question=full_data_question, answers=answers,
                            headers=data_handler.ANSWERS_DATA_HEADERS, question_comments=question_comments,
                            comment_id=comment_id, answer_comments=answer_comments, id=question_id, tags=question_tags)
 
@@ -169,7 +168,7 @@ def edit_question(question_id):
         question_to_edit = dict(data_handler.get_question(question_id)[0])
         title = question_to_edit["title"]
         message = question_to_edit["message"]
-        return render_template("new_edit_question.html", question_id=question_id, title=title, message=message)
+        return render_template("edit_question].html", question_id=question_id, title=title, message=message)
 
 
 @app.route('/list/<question_id>/new-answer', methods=["GET", "POST"])
@@ -182,7 +181,7 @@ def add_answer(question_id):
         data_handler.add_answer(question_id, message)
         return redirect(url_for("show_question", question_id=question_id))
 
-    return render_template('new_add_answer.html', question_id=question_id, question=question)
+    return render_template('add_answer.html', question_id=question_id, question=question)
 
 
 @app.route('/answer/<answer_id>/delete', methods=["GET", "POST"])
@@ -191,11 +190,10 @@ def delete_answer(answer_id):
     question_id = answer['question_id']
 
     if request.method != "POST":
-        return render_template("new_delete.html", answer_id=answer_id)
+        return render_template("delete.html", answer_id=answer_id)
     else:
 
         if request.form["you_sure_button"] == "Yes":
-            # TODO delete all comments for answer
             data_handler.delete_answer(answer_id)
             return redirect(url_for("show_question", question_id=question_id))
 
@@ -217,7 +215,20 @@ def edit_answer(answer_id):
         return redirect(url_for("show_question", question_id=question_id))
     else:
         message = answer_to_edit["message"]
-        return render_template('new_edit_answer.html', answer_id=answer_id, message=message)
+        return render_template('edit_answer.html', answer_id=answer_id, message=message)
+
+
+@app.route("/question/<question_id>/delete-tag", methods=['GET', 'POST'])
+def delete_tag(question_id):
+    all_question_data = data_handler.get_question(question_id)[0]
+    tags = data_handler.get_question_tags(question_id)
+
+    if request.method == 'POST':
+        tag_to_delete = request.form['tag_to_delete']
+        data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
+        flash('Delete success!')
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('delete_tag.html', question=all_question_data, tags=tags)
 
 
 @app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
@@ -232,40 +243,38 @@ def add_tag(question_id):
         if request.form['old_tag'] == 'new tag' and request.form['new_tag'] != '':
             data_handler.add_tag(request.form['new_tag'])
             data_handler.add_tag_to_question(request.form['new_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
         elif request.form['old_tag'] == 'new tag' and request.form['new_tag'] == '':
             # flash('Please provide new tag name or choose from the list')
             pass
         else:
             data_handler.add_tag(request.form['old_tag'])
             data_handler.add_tag_to_question(request.form['old_tag'], question_id)
-            return redirect(url_for("show_question", question_id=question_id))
-
-    return render_template('new_add_tag.html', question_id=question_id, question_title=all_question_data['title'],
-                           question_message=all_question_data['message'], tags=tag_names)
+        return redirect(url_for("show_question", question_id=question_id))
+    return render_template('add_tag.html', question_id=question_id,
+                           question=all_question_data, tags=tag_names)
 
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
     search_questions = data_handler.get_questions()
-    search_answers = []
+    # search_answers = []
 
     if request.args is not None:
         search_phrase = dict(request.args)['search_phrase']
         if search_phrase == '':
-            return render_template('new_list.html', search_questions=search_questions, search_answers=[],
+            return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                                    headers=data_handler.QUESTIONS_DATA_HEADERS)
 
         search_questions = data_handler.search_questions(search_phrase)
         search_answers = data_handler.search_answers(search_phrase)
 
         if not search_questions and not search_answers:
-            return render_template('new_list.html', search_questions=[], search_answers=[],
+            return render_template('question_list.html', search_questions=[], search_answers=[],
                                    headers=['no results found'])
         else:
             search_questions_id_from_answers = []
             search_questions_from_answers = []
-            search_question_from_answers_id = []
+            # search_question_from_answers_id = []
             for answer in search_answers:
                 search_questions_id_from_answers.append(data_handler.get_answer_question_id(answer['id']))
                 for i in range(len(search_questions_id_from_answers)):
@@ -279,12 +288,12 @@ def search():
                     search_questions_from_answers_no_duplicates.append(question[0])
                     added_questions_id.append(question[0]['id'])
 
-            return render_template('new_list.html', search_questions=search_questions,
+            return render_template('question_list.html', search_questions=search_questions,
                                    search_questions_from_answers=search_questions_from_answers_no_duplicates,
                                    search_answers=search_answers, headers=data_handler.QUESTIONS_DATA_HEADERS,
                                    answer_headers=data_handler.ANSWERS_DATA_HEADERS)
 
-    return render_template('new_list.html', search_questions=search_questions, search_answers=[],
+    return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                            headers=data_handler.QUESTIONS_DATA_HEADERS)
 
 
@@ -296,7 +305,7 @@ def add_question_comment(question_id):
     if request.method == 'POST':
         data_handler.sql_add_question_comment(question_id)
         return redirect(url_for("show_question", question_id=question_id))
-    return render_template('new_comment.html', question_id=question_id, question=question)
+    return render_template('add_comment.html', question_id=question_id, question=question)
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=["GET", "POST"])
@@ -308,7 +317,7 @@ def add_answer_comment(answer_id):
     if request.method == 'POST':
         data_handler.sql_add_answer_comment(answer_id)
         return redirect(url_for("show_question", question_id=question_id))
-    return render_template('new_answer_comment.html', answer_id=answer_id, answer=answer, question_id=question_id)
+    return render_template('add_answer_comment.html', answer_id=answer_id, answer=answer, question_id=question_id)
 
 
 @app.route('/comment/<comment_id>/edit', methods=["GET", "POST"])
@@ -346,6 +355,46 @@ def delete_comment(comment_id):
             return redirect(url_for("show_question", question_id=question_id))
         elif request.form["you_sure_button"] == "No":
             return redirect(url_for("show_question", question_id=question_id))
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    # if already_logged:
+    # communicate
+    #     return redirect (url_for('main_page'))
+
+    if request.method == 'POST':
+        username = request.form['login']
+        if data_handler.check_if_username_exist(username):
+            flash('Account associated with this email already exist, log into your account!')
+            return redirect('login')
+        else:
+            password = request.form['password']
+            password_confirm = request.form['password_confirm']
+            if password != password_confirm:
+                flash('passwords are not the same!')
+                return redirect('register')
+            # todo: confirm email
+            data_handler.add_new_user(username, password)
+            flash('registration success, log into your new account!')
+            return redirect('login')
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['login']
+        password = request.form['password']
+    #       if check if the usrnme&pass correct:
+    #           message about corect loging in
+    #           return redirect(url_for('main_page'))
+    #       else:
+    #           message wrong login/password
+    #           return redirect(url_for('login'))
+
+    return render_template('login.html')
 
 
 if __name__ == "__main__":

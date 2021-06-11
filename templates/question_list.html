@@ -36,9 +36,9 @@
     </form>
     <!--suppress HtmlUnknownTarget -->
     <form action='/search' method="get">
-        <label>
-            <textarea name="search_phrase" rows="1" cols="40" autofocus></textarea>
-        </label>
+        <p><label>
+            <input type="search" name="search_phrase" autofocus>
+        </label></p>
         <p>
             <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
         </p>
@@ -48,6 +48,7 @@
         <div id="styled>">
         <table>
         {% for header in headers %}
+            {#            todo:replace not working?#}
             <th>{{ header.upper().replace('_', ' ') }}</th>
         {% endfor %}
         {% for question in search_questions %}

@@ -7,18 +7,30 @@
     {% block head %}
     {% endblock %}
 </head>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 <body>
 {#<header class="center-text">#}
 {#            <a class="logo" href="new_index.html"><i class="fas fa-hamburger logo-icon"></i> AskMate</a>#}
 {#        </header>#}
 <div id="body">
+    <p><a href="/register">register/login</a></p>
     {% block body %}
     {% endblock %}
-    <p><a href="/">Back to the main page</a></p>
 </div>
 <div id="footer">
     {% block footer %}
     {% endblock %}
+    <p><a href="/">Back to the main page</a></p>
     <p>AskMate</p>
 </div>
 </body>

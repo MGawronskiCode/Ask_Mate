@@ -12,9 +12,9 @@
     <h1>AskMate</h1>
     <!--suppress HtmlUnknownTarget -->
     <form action='/search' method="get">
-        <label>
-            <textarea name="search_phrase" rows="1" cols="40" autofocus></textarea>
-        </label>
+        <p><label>
+            <input type="search" name="search_phrase" autofocus>
+        </label></p>
         <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
     </form>
     <p><a href="{{ url_for('list_questions') }}">Show all questions list</a></p>
@@ -44,7 +44,6 @@
                 {% endfor %}
             </tr>
             <tr>
-                {#            todo: merge cells#}
                 <td></td>
                 <td></td>
                 <td></td>
