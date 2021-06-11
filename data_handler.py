@@ -493,11 +493,12 @@ def check_user_login(cursor, username, password):
 @connection.connection_handler
 def add_new_user(cursor, username, password):
     password_hash = str(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))[2:-1]
+    actual_date = get_submission_time()
     query = """
-        INSERT INTO "user" (username, password) 
-        VALUES (%s, %s)
+        INSERT INTO "user" (username, password, registration_date, asked_questions, answers, comments, reputation) 
+        VALUES (%s, %s, %s, 0, 0, 0, 0)
     """
-    query_params = [username, password_hash]
+    query_params = [username, password_hash, actual_date]
     cursor.execute(query, query_params)
 
 # add_new_user('pjoter@gmail.com', '4321')
