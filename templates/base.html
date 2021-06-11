@@ -7,6 +7,17 @@
     {% block head %}
     {% endblock %}
 </head>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 <body>
 {#<header class="center-text">#}
 {#            <a class="logo" href="new_index.html"><i class="fas fa-hamburger logo-icon"></i> AskMate</a>#}

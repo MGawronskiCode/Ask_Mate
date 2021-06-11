@@ -5,7 +5,7 @@ from flask import (
     render_template,
     request,
     redirect,
-    url_for
+    url_for, flash
 )
 from werkzeug.utils import secure_filename
 
@@ -17,6 +17,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 VOTE_TYPES = {'upvote': 1, 'downvote': -1}
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # maksymalny akceptowany rozmiar pliku: 8mb
 
@@ -34,7 +35,6 @@ def file_extension_acceptable(filename: str) -> bool:
 
 @app.route("/")
 def main_page():
-    #TODO how to merge???
     sort_column = 'id'
     sort_method = 'descending'
     user_questions = data_handler.sort_questions(sort_column, sort_method)
@@ -79,8 +79,6 @@ def delete_question(question_id):
     if request.method == "POST":
         if request.form["you_sure_button"] == "Yes":
             
-            # TODO delete all answers
-            # TODO delete all comments to question
             data_handler.delete_question(question_id)
 
             return redirect(url_for("list_questions"))
@@ -227,7 +225,7 @@ def delete_tag(question_id):
     if request.method == 'POST':
         tag_to_delete = request.form['tag_to_delete']
         data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
-        # todo: info to user about deleting success
+        flash('Delete success!')
         return redirect(url_for("show_question", question_id=question_id))
     return render_template('delete_tag.html', question=all_question_data, tags=tags)
 
@@ -367,17 +365,17 @@ def register():
     if request.method == 'POST':
         username = request.form['login']
         if data_handler.check_if_username_exist(username):
-            # todo: communicate user exist
+            flash('Account associated with this email already exist, log into your account!')
             return redirect('login')
         else:
             password = request.form['password']
             password_confirm = request.form['password_confirm']
             if password != password_confirm:
-                # todo: message wrong password
+                flash('passwords are not the same!')
                 return redirect('register')
             # todo: confirm email
             data_handler.add_new_user(username, password)
-            # todo: communicate added
+            flash('registration success, log into your new account!')
             return redirect('login')
 
     return render_template('register.html')

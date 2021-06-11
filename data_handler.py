@@ -90,7 +90,6 @@ def get_question(cursor, question_id):
 
 @connection.connection_handler
 def add_answer(cursor, question_id, message, image=None):
-    # TODO add uploading image to answer
     submission_time = get_submission_time()
     query = '''
     insert into answer (submission_time, vote_number, question_id, message)
