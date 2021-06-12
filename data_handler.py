@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import bcrypt
 from flask import request
 from psycopg2 import sql
 
@@ -89,7 +90,6 @@ def get_question(cursor, question_id):
 
 @connection.connection_handler
 def add_answer(cursor, question_id, message, image=None):
-    # TODO add uploading image to answer
     submission_time = get_submission_time()
     query = '''
     insert into answer (submission_time, vote_number, question_id, message)
@@ -171,15 +171,16 @@ def delete_question(cursor, question_id):
 #
 #     '''
 
+
 # def get_answer_ids(cursor, question_id):
 #     query = "select id from answer where question_id = question_id"
 #     cursor.execute(query)
 #     return cursor.fetchall()
 
 def delete_answers_comments(question_id):
-
     query = "delete from comment where answer_id in(select id from answer where question_id = question_id) "
     return query
+
 
 def delete_question_answers(question_id):
     query = "delete from answer where question_id = question_id"
@@ -188,6 +189,7 @@ def delete_question_answers(question_id):
 def delete_question_comments(question_id):
     query = "delete from comment where question_id = question_id"
     return query
+
 
 @connection.connection_handler
 def delete_answer(cursor, answer_id):
@@ -464,3 +466,55 @@ def delete_tag_from_question(cursor, question_id, tag_to_delete):
         '''
     query_params = [question_id, tag['id']]
     cursor.execute(query, query_params)
+
+
+@connection.connection_handler
+def check_if_username_exist(cursor, username):
+    query = """
+        SELECT *
+        FROM "user"
+        WHERE username=%s
+    """
+    query_params = [username]
+    cursor.execute(query, query_params)
+
+    # if not exist returns None
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def check_user_login(cursor, username, password):
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    query = """
+        SELECT *
+        FROM "user"
+        WHERE username=%s
+    """
+    query_params = [username]
+    cursor.execute(query, query_params)
+    return bcrypt.checkpw(cursor.fetchone()['password'].encode('utf-8'), password_hash)
+
+
+@connection.connection_handler
+def add_new_user(cursor, username, password):
+    password_hash = str(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))[2:-1]
+    actual_date = get_submission_time()
+    query = """
+        INSERT INTO "user" (username, password, registration_date, asked_questions, answers, comments, reputation) 
+        VALUES (%s, %s, %s, 0, 0, 0, 0)
+    """
+    query_params = [username, password_hash, actual_date]
+    cursor.execute(query, query_params)
+
+# add_new_user('pjoter@gmail.com', '4321')
+
+# def make_password_hash(password):
+#     return bcrypt.hashpw(password, bcrypt.gensalt())
+#
+# password = b'123'
+# hashed = make_password_hash(password)
+#
+# if bcrypt.checkpw(password, hashed):
+#     print('match')
+# else:
+#     print('not')
