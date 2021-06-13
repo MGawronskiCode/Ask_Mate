@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Log out
+{% endblock %}
+
+{% block body %}
+    <h3>You are about to log out.You sure? </h3>
+    <form action = "/logout" method = "POST">
+        <button type = "submit" name = "logout" value = "yes">Yes, log me out</button>
+        <button type = "submit" name = "logout" value = "no">No, Im staying</button>
+
+    </form>
+
+
+{% endblock %}

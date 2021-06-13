@@ -5,7 +5,7 @@ from flask import (
     render_template,
     request,
     redirect,
-    url_for, flash
+    url_for, flash, session
 )
 from werkzeug.utils import secure_filename
 
@@ -21,21 +21,12 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # maksymalny akceptowany rozmiar pliku: 8mb
 
-
-# zasadniczo w webie jest tak, że niezależnie od tego co zrobimy po stronie frontendu,
-# i tak wszystko musimy ponownie sprawdzić na backendzie. (zawsze można zmienić ręcznie formularz na froncie i wrzucić jakieś śmieci)
-# w templacie html zaznaczyłem, że akceptujemy tylko png, jpg i jpeg,
-# oraz że plik jest wymagany.
-# to nie wystarczy (tzn jest fajne, bo użytkownik będzie dokładnie wiedział
-# dzięki komunikatom czego w jego formularzu brakuje)
-# więc muszę te same rzeczy sprawdzić po stronie pytona
 def file_extension_acceptable(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/")
 def main_page():
-    #TODO how to merge???
     sort_column = 'id'
     sort_method = 'descending'
     user_questions = data_handler.sort_questions(sort_column, sort_method)
@@ -366,7 +357,7 @@ def register():
     if request.method == 'POST':
         username = request.form['login']
         if data_handler.check_if_username_exist(username):
-            flash('Account associated with this email already exist, log into your account!')
+            flash('Account associated with this email already exists, log into your account!')
             return redirect('login')
         else:
             password = request.form['password']
@@ -381,20 +372,49 @@ def register():
 
     return render_template('register.html')
 
+@app.route("/login", methods = ["GET", "POST"])
+def login_user():
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['login']
+    if request.method == "POST":
+        username = request.form['username']
         password = request.form['password']
-    #       if check if the usrnme&pass correct:
-    #           message about corect loging in
-    #           return redirect(url_for('main_page'))
-    #       else:
-    #           message wrong login/password
-    #           return redirect(url_for('login'))
+        if 'username' in session:
+            flash("You are already logged in!")
+            return redirect(url_for("main_page"))
+        else:
+            if data_handler.validate_user(username, password):
+                flash(f'You are logged in as {username}!')
+                session['username'] = username
+                return redirect(url_for("main_page"))
+            flash("Incorrect login or password ")
+            return redirect(url_for("login_user"))
 
-    return render_template('login.html')
+    return render_template("login.html")
+
+@app.route("/logout", methods = ["GET", "POST"])
+def logout_user():
+
+    if request.method == "POST":
+        if request.form['logout'] == "yes":
+            session.pop('username', None)
+
+        return redirect(url_for("main_page"))
+
+    return render_template("logout.html")
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form['login']
+#         password = request.form['password']
+#     #       if check if the usrnme&pass correct:
+#     #           message about corect loging in
+#     #           return redirect(url_for('main_page'))
+#     #       else:
+#     #           message wrong login/password
+#     #           return redirect(url_for('login'))
+#
+#     return render_template('sql/login.html')
 
 
 if __name__ == "__main__":
