@@ -11,15 +11,15 @@
 {% block body %}
     <!--suppress HtmlUnknownTarget -->
     <form action="/register" method="POST" enctype="multipart/form-data">
-        <p><label>email
-
-            <input type="email" name="login"  autofocus required> <!-pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="john.doe@email.com"-->
+        <p><label>
+            <input type="email" name="login" autofocus required placeholder="email">
+            <!-pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="john.doe@email.com"-->
         </label></p>
-        <p><label>password
-            <input type="password" name="password" required>
+        <p><label>
+            <input type="password" name="password" required placeholder="password">
         </label></p>
-        <p><label>confirm password
-            <input type="password" name="password_confirm" required>
+        <p><label>
+            <input type="password" name="password_confirm" required placeholder=" confirm password">
         </label></p>
         <p><input type="submit" value="register"></p>
     </form>
