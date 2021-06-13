@@ -507,7 +507,7 @@ def add_new_user(cursor, username, password):
     cursor.execute(query, query_params)
 
 
-add_new_user('pjoter@gmail.com', '4321')
+# add_new_user('pjoter@gmail.com', '4321')
 
 # def make_password_hash(password):
 #     return bcrypt.hashpw(password, bcrypt.gensalt())

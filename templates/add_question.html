@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-    {% block title %}Add question{% endblock %}
-</head>
-<body>
+{% block title %}
+    Add question
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
 {% block body %}
     <h3>Add new question:</h3>
     <!--suppress HtmlUnknownTarget -->
@@ -20,5 +20,7 @@
         <p><input type="submit" value="Add question"></p>
     </form>
 {% endblock %}
-</body>
-</html> 
+
+{% block footer %}
+
+{% endblock %}

@@ -168,7 +168,7 @@ def edit_question(question_id):
         question_to_edit = dict(data_handler.get_question(question_id)[0])
         title = question_to_edit["title"]
         message = question_to_edit["message"]
-        return render_template("edit_question].html", question_id=question_id, title=title, message=message)
+        return render_template("edit_question.html", question_id=question_id, title=title, message=message)
 
 
 @app.route('/list/<question_id>/new-answer', methods=["GET", "POST"])
