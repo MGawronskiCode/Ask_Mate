@@ -350,10 +350,6 @@ def delete_comment(comment_id):
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    # if already_logged:
-    # communicate
-    #     return redirect (url_for('main_page'))
-
     if request.method == 'POST':
         username = request.form['login']
         if data_handler.check_if_username_exist(username):
@@ -372,9 +368,9 @@ def register():
 
     return render_template('register.html')
 
+
 @app.route("/login", methods = ["GET", "POST"])
 def login_user():
-
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
@@ -391,6 +387,7 @@ def login_user():
 
     return render_template("login.html")
 
+
 @app.route("/logout", methods = ["GET", "POST"])
 def logout_user():
 
@@ -401,20 +398,6 @@ def logout_user():
         return redirect(url_for("main_page"))
 
     return render_template("logout.html")
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         username = request.form['login']
-#         password = request.form['password']
-#     #       if check if the usrnme&pass correct:
-#     #           message about corect loging in
-#     #           return redirect(url_for('main_page'))
-#     #       else:
-#     #           message wrong login/password
-#     #           return redirect(url_for('login'))
-#
-#     return render_template('sql/login.html')
 
 
 @app.route('/users')
