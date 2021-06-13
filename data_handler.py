@@ -12,6 +12,7 @@ ANSWERS_DATA_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', '
 QUESTIONS_DATA_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 USER_DATA_HEADERS = ['ID', 'NAME', 'REGISTRATION DATE', 'ASKED QUESTIONS', 'ANSWERS', 'COMMENTS', 'REPUTATION']
 
+
 @connection.connection_handler
 def get_answers(cursor):
     query = """ select id, submission_time, vote_number, message, image 
@@ -108,13 +109,15 @@ def vote(cursor, vote_value, object_id, object_type):
 
 
 @connection.connection_handler
-def add_question(cursor, question_data_dict):
+def add_question(cursor, question_data_dict, session):
     sub_time = get_submission_time()
-    query = ''' insert into question (submission_time,view_number, vote_number,title, message, image)
-    values(%s,0,0, %s, %s,%s)
+    user_id = get_user_id_by_username(session['username'])
+    query = ''' insert into question (submission_time, view_number, vote_number, title, message, image, user_id)
+    values(%s, 0, 0, %s, %s,%s, %s)
     RETURNING id;  
     '''
-    query_params = [sub_time, question_data_dict['title'], question_data_dict['message'], question_data_dict['image']]
+    query_params = [sub_time, question_data_dict['title'], question_data_dict['message'], question_data_dict['image'],
+                    user_id]
     cursor.execute(query, query_params)
     question_id = cursor.fetchall()
     return question_id[0]['id']
@@ -149,8 +152,6 @@ def increase_question_views(cursor, question_id):
 
 @connection.connection_handler
 def delete_question(cursor, question_id):
-
-
     cursor.execute(delete_answers_comments(question_id))
     cursor.execute(delete_question_answers(question_id))
     cursor.execute(delete_question_comments(question_id))
@@ -158,7 +159,6 @@ def delete_question(cursor, question_id):
     query1 = "delete from question where id = %s "
     query_params = [question_id]
     cursor.execute(query1, query_params)
-
 
 
 #     query = ''' WITH deleting_func AS (
@@ -186,6 +186,7 @@ def delete_question_answers(question_id):
     query = "delete from answer where question_id = question_id"
     return query
 
+
 def delete_question_comments(question_id):
     query = "delete from comment where question_id = question_id"
     return query
@@ -204,7 +205,7 @@ def delete_answer(cursor, answer_id):
     # '''
 
     query_params = [answer_id]
-    cursor.execute(query1,query_params)
+    cursor.execute(query1, query_params)
     cursor.execute(query2, query_params)
 
 
@@ -481,6 +482,7 @@ def check_if_username_exist(cursor, username):
     # if not exist returns None
     return cursor.fetchone()
 
+
 @connection.connection_handler
 def add_new_user(cursor, username, password):
     password_hash = str(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))[2:-1]
@@ -492,25 +494,13 @@ def add_new_user(cursor, username, password):
     query_params = [username, password_hash, actual_date]
     cursor.execute(query, query_params)
 
-# @connection.connection_handler
-def validate_user( username, password):
-    #returns bool
 
+# @connection.connection_handler
+def validate_user(username, password):
+    # returns bool
     hashed = check_if_username_exist(username)['password']
     user_valid = bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
     return user_valid
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # @connection.connection_handler
@@ -524,8 +514,6 @@ def validate_user( username, password):
 #     query_params = [username]
 #     cursor.execute(query, query_params)
 #     return bcrypt.checkpw(cursor.fetchone()['password'].encode('utf-8'), password_hash)
-
-
 
 
 # add_new_user('pjoter@gmail.com', '4321')
@@ -550,3 +538,15 @@ def get_users(cursor):
     """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    query = """
+        SELECT id
+        FROM "user"
+        WHERE username = %s
+    """
+    query_params = [username]
+    cursor.execute(query, query_params)
+    return cursor.fetchone()

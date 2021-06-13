@@ -1,3 +1,6 @@
+# przed dodaniem question, answer, comment, tag sprawdzić, czy jest zalogowany
+
+
 import os
 
 from flask import (
@@ -40,30 +43,34 @@ def main_page():
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
-    if request.method == "POST":
-        question_data = dict(request.form)
-        image_data = dict(request.files)
+    if 'username' in session:
+        if request.method == "POST":
+            question_data = dict(request.form)
+            image_data = dict(request.files)
 
-        if image_data.values() != "<FileStorage: '' ('application/octet-stream')>":
-            image = request.files['image']
-            # if not file_extension_acceptable(image.filename):
-            #     flash('Unsupported file format')
-            #     return redirect(request.url)
-            sanitized_filename = secure_filename(image.filename)
-            image_storage_filepath = os.path.join(UPLOAD_FOLDER, sanitized_filename)
-            image.save(image_storage_filepath)
-            image_storage_filepath_as_list = image_storage_filepath.split('/')
-            image_storage_filepath_as_list.remove(image_storage_filepath_as_list[0])
+            if image_data.values() != "<FileStorage: '' ('application/octet-stream')>":
+                image = request.files['image']
+                # if not file_extension_acceptable(image.filename):
+                #     flash('Unsupported file format')
+                #     return redirect(request.url)
+                sanitized_filename = secure_filename(image.filename)
+                image_storage_filepath = os.path.join(UPLOAD_FOLDER, sanitized_filename)
+                image.save(image_storage_filepath)
+                image_storage_filepath_as_list = image_storage_filepath.split('/')
+                image_storage_filepath_as_list.remove(image_storage_filepath_as_list[0])
 
-            prepared_image_data = "".join(image_storage_filepath_as_list)
-            question_data['image'] = prepared_image_data.replace("\\", "/")
-            # image_storage_filepath.replace("\\", "/")
+                prepared_image_data = "".join(image_storage_filepath_as_list)
+                question_data['image'] = prepared_image_data.replace("\\", "/")
+                # image_storage_filepath.replace("\\", "/")
+            else:
+                question_data['image'] = ''
+            question_id = data_handler.add_question(question_data, session)
+            return redirect(url_for("show_question", question_id=question_id))
         else:
-            question_data['image'] = ''
-        question_id = data_handler.add_question(question_data)
-        return redirect(url_for("show_question", question_id=question_id))
+            return render_template("add_question.html")
     else:
-        return render_template("add_question.html")
+        flash('you have to be logged in to add new question')
+        return redirect(url_for('main_page'))
 
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
