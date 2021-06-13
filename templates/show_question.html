@@ -88,8 +88,11 @@
         </tr>
     </table>
 
-
+    {% if session['username'] %}
     <p><a href="/list/{{ question.id }}/new-answer">Add an answer</a></p>
+    {% else %}
+    <p><a href="{{ url_for('login_user') }}">Sign in to add new answer</a></p>
+    {% endif %}
     <p><!--suppress HtmlUnknownTarget -->
         <a href="/list">Back to the questions list</a></p>
 {% endblock %}

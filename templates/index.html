@@ -18,7 +18,12 @@
         <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
     </form>
     <p><a href="{{ url_for('list_questions') }}">Show all questions list</a></p>
+    {% if session['username'] %}
     <p><a href="{{ url_for('add_question') }}">Add new question</a></p>
+    {% else %}
+    <p><a href="{{ url_for('login_user') }}">Sign in to add new question</a></p>
+    {% endif %}
+
     <h2>Latest questions:</h2>
 
     <table>

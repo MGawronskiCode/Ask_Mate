@@ -16,3 +16,4 @@ toml==0.10.2
 virtualenv==20.4.6
 wcwidth==0.2.5
 Werkzeug==2.0.0rc5
+bcrypt~=3.2.0

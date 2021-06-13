@@ -481,20 +481,6 @@ def check_if_username_exist(cursor, username):
     # if not exist returns None
     return cursor.fetchone()
 
-
-@connection.connection_handler
-def check_user_login(cursor, username, password):
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    query = """
-        SELECT *
-        FROM "user"
-        WHERE username=%s
-    """
-    query_params = [username]
-    cursor.execute(query, query_params)
-    return bcrypt.checkpw(cursor.fetchone()['password'].encode('utf-8'), password_hash)
-
-
 @connection.connection_handler
 def add_new_user(cursor, username, password):
     password_hash = str(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))[2:-1]
@@ -505,6 +491,41 @@ def add_new_user(cursor, username, password):
     """
     query_params = [username, password_hash, actual_date]
     cursor.execute(query, query_params)
+
+# @connection.connection_handler
+def validate_user( username, password):
+    #returns bool
+
+    hashed = check_if_username_exist(username)['password']
+    user_valid = bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+    return user_valid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @connection.connection_handler
+# def check_user_login(cursor, username, password):
+#     password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+#     query = """
+#         SELECT *
+#         FROM "user"
+#         WHERE username=%s
+#     """
+#     query_params = [username]
+#     cursor.execute(query, query_params)
+#     return bcrypt.checkpw(cursor.fetchone()['password'].encode('utf-8'), password_hash)
+
+
 
 
 # add_new_user('pjoter@gmail.com', '4321')
