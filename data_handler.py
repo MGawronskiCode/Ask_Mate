@@ -10,7 +10,7 @@ ANSWERS_DATA_PATH = 'sample_data/answer.csv'
 QUESTIONS_DATA_PATH = 'sample_data/question.csv'
 ANSWERS_DATA_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 QUESTIONS_DATA_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-
+USER_DATA_HEADERS = ['ID', 'NAME', 'REGISTRATION DATE', 'ASKED QUESTIONS', 'ANSWERS', 'COMMENTS', 'REPUTATION']
 
 @connection.connection_handler
 def get_answers(cursor):
@@ -506,7 +506,8 @@ def add_new_user(cursor, username, password):
     query_params = [username, password_hash, actual_date]
     cursor.execute(query, query_params)
 
-# add_new_user('pjoter@gmail.com', '4321')
+
+add_new_user('pjoter@gmail.com', '4321')
 
 # def make_password_hash(password):
 #     return bcrypt.hashpw(password, bcrypt.gensalt())
@@ -518,3 +519,13 @@ def add_new_user(cursor, username, password):
 #     print('match')
 # else:
 #     print('not')
+
+
+@connection.connection_handler
+def get_users(cursor):
+    query = """
+        SELECT id, username, registration_date, asked_questions, answers, comments, reputation
+        FROM "user"
+    """
+    cursor.execute(query)
+    return cursor.fetchall()

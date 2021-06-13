@@ -39,8 +39,8 @@ def main_page():
     sort_column = 'id'
     sort_method = 'descending'
     user_questions = data_handler.sort_questions(sort_column, sort_method)
-    last_questions = []
 
+    last_questions = []
     for i in range(5):
         last_questions.append(dict(user_questions[i]))
 
@@ -395,6 +395,13 @@ def login():
     #           return redirect(url_for('login'))
 
     return render_template('login.html')
+
+
+@app.route('/users')
+def users():
+    user_list = data_handler.get_users()
+
+    return render_template('list_users.html', users=user_list, headers=data_handler.USER_DATA_HEADERS)
 
 
 if __name__ == "__main__":
