@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
+
+{% block title %}
+    Edit comment
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
 {% block body %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>AskMate</title>
-    </head>
     <form action="/comment/{{ id }}/edit" method="post">
         <h4>You can edit your comment</h4>
         <p><textarea name="message"> {{ message }}</textarea></p>
-
         <input type="submit" value="Save">
     </form>
     <p><a href="{{ url_for('show_question',question_id=question_id) }}"> Back to question </a></p>
+{% endblock %}
+
+{% block footer %}
 
 {% endblock %}
-</body>
-</html>ml>

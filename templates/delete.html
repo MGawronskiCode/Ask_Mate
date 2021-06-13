@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Delete{% endblock %}</title>
-</head>
-<body>
+
+{% block title %}
+    Delete
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
 {% block body %}
     <h3>Are you sure you want to delete?</h3>
     <a>
@@ -15,6 +17,9 @@
         </form>
     </a>
 {% endblock %}
-</body>
-{% block footer %}{% endblock %}
-</html> 
+
+{% block footer %}
+
+{% endblock %}
+
+{#todo:what is delete comment and delete message for? its probably the same as this one#}
