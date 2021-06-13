@@ -44,16 +44,16 @@
                 {% endfor %}
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="4">
                 <td>
                     <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><BR><br><br>
                 </td>
             </tr>
         {% endfor %}
     </table>
+    {#    todo: check if user logged#}
+    {#{% if user logged in %}#}
+    <a href="/users">Show users list</a>
 {% endblock %}
 
 {% block footer %}
