@@ -56,9 +56,12 @@
             </tr>
         {% endfor %}
     </table>
-    {#    todo: check if user logged#}
-    {#{% if user logged in %}#}
-    <a href="/users">Show users list</a>
+
+    {% if session['username'] %}
+    <a href="/users">Show users list</a><br>
+    {% else %}
+        <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
+    {% endif %}
 {% endblock %}
 
 {% block footer %}
