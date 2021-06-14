@@ -14,9 +14,15 @@
     <p>{{ question['message'] }}</p>
     <img class="image" src="/static/{{ question.image }}" alt="" width=300>
 
-    <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
-    <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
-    <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
+    {% if session['username'] %}
+        <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
+        {% if session['user_id'] == question['user_id'] %}
+            <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
+            <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
+        {% endif %}
+    {% endif %}
+
+
 
 
     <p>{% if tags %}
@@ -25,8 +31,10 @@
             {{ tag }}
         {% endfor %}
     {% endif %}</p>
-    <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
-    <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
+    {% if session['user_id'] == question['user_id'] %}
+        <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
+        <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
+    {% endif %}
     <th><strong>
         Comment Section
     </strong></th>
@@ -38,6 +46,7 @@
             <tr>
             <td>{{ comment['submission_time'] }}</td>
             <td>{{ comment['message'] }}</td>
+            {#            todo: check id of the user who added comment, show links below only to this user#}
             <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
             <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
         {% endfor %}
@@ -53,11 +62,13 @@
             <tr> {% for element in answer.values() %}
                 {% if element == answer['vote_number'] %}
                     <td>
-                        <form action='/list/{{ question.id }}' method="POST">
-                            <button name="vote" value="upvote {{ answer['id'] }}">upvote</button>
-                            {{ element }}
-                            <button name="vote" value="downvote {{ answer['id'] }}">downvote</button>
-                        </form>
+                        {{ element }}
+                        {% if session['username'] %}
+                            <form action='/list/{{ question.id }}' method="POST">
+                                <button name="vote" value="upvote {{ answer['id'] }}">upvote</button>
+                                <button name="vote" value="downvote {{ answer['id'] }}">downvote</button>
+                            </form>
+                        {% endif %}
                     </td>
                 {% else %}
                     <td>{{ element }}</td>
@@ -82,6 +93,7 @@
             <tr>
             <td>{{ comment['submission_time'] }}</td>
             <td>{{ comment['message'] }}</td>
+            {#            todo: show links below only to user who added it#}
             <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
             <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
         {% endfor %}
@@ -89,9 +101,9 @@
     </table>
 
     {% if session['username'] %}
-    <p><a href="/list/{{ question.id }}/new-answer">Add an answer</a></p>
+        <p><a href="/list/{{ question.id }}/new-answer">Add an answer</a></p>
     {% else %}
-    <p><a href="{{ url_for('login_user') }}">Sign in to add new answer</a></p>
+        <p><a href="{{ url_for('login_user') }}">Sign in to add new answer</a></p>
     {% endif %}
     <p><!--suppress HtmlUnknownTarget -->
         <a href="/list">Back to the questions list</a></p>

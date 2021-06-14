@@ -549,4 +549,4 @@ def get_user_id_by_username(cursor, username):
     """
     query_params = [username]
     cursor.execute(query, query_params)
-    return cursor.fetchone()
+    return cursor.fetchone()['id']
