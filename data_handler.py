@@ -639,14 +639,26 @@ def get_all_added_by_user(cursor, user_id):
 
     query = "select answer_id from user_answer where user_id = %s"
     cursor.execute(query, query_params)
-    user_data['answer'] = cursor.fetchall()
+    tmp_data = cursor.fetchall()
+    answers_ids = []
+    for element in tmp_data:
+        answers_ids.append(element['answer_id'])
+    user_data['answer'] = answers_ids
 
     query = "select comment_id from user_comment where user_id = %s"
     cursor.execute(query, query_params)
-    user_data['comment'] = cursor.fetchall()
+    tmp_data = cursor.fetchall()
+    comments_ids = []
+    for element in tmp_data:
+        comments_ids.append(element['comment_id'])
+    user_data['comment'] = comments_ids
 
     query = "select question_id from user_question where user_id = %s"
     cursor.execute(query, query_params)
-    user_data['question'] = cursor.fetchall()
+    tmp_data = cursor.fetchall()
+    questions_ids = []
+    for element in tmp_data:
+        questions_ids.append(element['question_id'])
+    user_data['question'] = questions_ids
 
     return user_data

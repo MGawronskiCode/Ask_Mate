@@ -16,8 +16,12 @@
 
     {% if session['username'] %}
         <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
-            <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
-            <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
+    {% else %}
+        <p><a href="{{ url_for('login_user') }}">Sign in to add comment</a></p>
+    {% endif %}
+    {% if question['id'] in session['added_by_user']['question'] %}
+        <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
+        <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
     {% endif %}
 
     <p>{% if tags %}
@@ -26,8 +30,10 @@
             {{ tag }}
         {% endfor %}
     {% endif %}</p>
+    {% if question['id'] in session['added_by_user']['question'] %}
         <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
         <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
+    {% endif %}
     <th><strong>
         Comment Section
     </strong></th>
@@ -39,8 +45,11 @@
             <tr>
             <td>{{ comment['submission_time'] }}</td>
             <td>{{ comment['message'] }}</td>
-            <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
-            <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+            {#            todo doesnt work if below (edit/delete link visible to all)#}
+            {% if comment['id'] in session['added_by_user']['comment'] %}
+                <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
+                <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+            {% endif %}
         {% endfor %}
         </tr>
     </table>
@@ -55,21 +64,26 @@
                 {% if element == answer['vote_number'] %}
                     <td>
                         {{ element }}
-                            <form action='/list/{{ question.id }}' method="POST">
+                        <form action='/list/{{ question.id }}' method="POST">
+                            {% if session['username'] %}
                                 <button name="vote" value="upvote {{ answer['id'] }}">upvote</button>
                                 <button name="vote" value="downvote {{ answer['id'] }}">downvote</button>
-                            </form>
+                            {% endif %}
+                        </form>
                     </td>
                 {% else %}
                     <td>{{ element }}</td>
                 {% endif %}
             {% endfor %}
-                <td><a href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
-                <td><a href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
-                <td><a href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
+                {% if session['username'] %}
+                    <td><a href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
+                {% endif %}
+                {% if answer['id'] in session['added_by_user']['answer'] %}
+                    <td><a href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
+                    <td><a href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
+                {% endif %}
             </tr>
         {% endfor %}
-
     </table>
     <th><strong>
         Comments
@@ -82,8 +96,10 @@
             <tr>
                 <td>{{ comment['submission_time'] }}</td>
                 <td>{{ comment['message'] }}</td>
+                {% if comment['id'] in session['added_by_user']['comments'] %}
                     <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
                     <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+                {% endif %}
             </tr>
         {% endfor %}
 

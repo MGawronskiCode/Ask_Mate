@@ -27,7 +27,6 @@ app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # maksymalny akceptowany roz
 def file_extension_acceptable(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route("/")
 def main_page():
     sort_column = 'id'
@@ -408,6 +407,7 @@ def logout_user():
         if request.form['logout'] == "yes":
             session.pop('username', None)
             session.pop('user_id', None)
+            session['added_by_user'] = {'answer': [], 'comment': [], 'question': []}
 
         return redirect(url_for("main_page"))
 
@@ -428,3 +428,4 @@ def users():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    session['added_by_user'] = {'answer': [], 'comment': [], 'question': []}
