@@ -179,7 +179,7 @@ def add_answer(question_id):
     question = [full_data_question['title'], full_data_question['message']]
     if request.method == 'POST':
         message = dict(request.form)['answer']
-        data_handler.add_answer(question_id, message)
+        data_handler.add_answer(question_id, message, session)
         return redirect(url_for("show_question", question_id=question_id, session=session))
 
     return render_template('add_answer.html', question_id=question_id, question=question, session=session)

@@ -90,15 +90,28 @@ def get_question(cursor, question_id):
 
 
 @connection.connection_handler
-def add_answer(cursor, question_id, message, image=None):
+def add_answer(cursor, question_id, message, session, image=None):
     submission_time = get_submission_time()
     query = '''
     insert into answer (submission_time, vote_number, question_id, message)
     values(%s, 0, %s, %s)
+    returning id
     '''
     query_params = [submission_time, question_id, message]
     cursor.execute(query, query_params)
-    return cursor.rowcount
+
+    user_id = session['user_id']
+    answer_id = cursor.fetchone()['id']
+    add_user_answer(user_id, answer_id)
+
+
+@connection.connection_handler
+def add_user_answer(cursor, user_id, answer_id):
+    query = """
+        INSERT INTO user_answer (user_id, answer_id) VALUES (%s, %s)
+    """
+    query_params = [user_id, answer_id]
+    cursor.execute(query, query_params)
 
 
 @connection.connection_handler
