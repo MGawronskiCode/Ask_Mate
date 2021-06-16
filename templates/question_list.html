@@ -48,24 +48,24 @@
         <div id="styled>">
         <table>
         {% for header in headers %}
-            {#            todo:replace not working?#}
-            <th>{{ header.upper().replace('_', ' ') }}</th>
+            <th>{{ header.upper() }}</th>
         {% endfor %}
         {% for question in search_questions %}
             <tr>
                 {% for key in question.keys() %}
                     <td>
-                        {% if key == 'image' %}
+                        {% if key != 'image' %}
+                            {{ question[key] }}
+                        {% else %}
                             <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
                         {% endif %}
-
-                        {{ question[key] }}
-
                         {% if key == 'vote_number' %}
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
-                                <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
-                                <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                                {% if session['username'] %}
+                                    <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
+                                    <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                                {% endif %}
                             </form>
                         {% endif %}
                     </td>
@@ -97,16 +97,16 @@
                         <img src="/static/{{ question['image'] }}" alt="" width=300>
                     {% endif %}
                     {{ question[key] }}
-
                     {% if key == 'vote_number' %}
                         <!--suppress HtmlUnknownTarget -->
                         <form action='/list' method="POST">
-                            <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
-                            <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                            {% if session['username'] %}
+                                <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
+                                <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                            {% endif %}
                         </form>
                     {% endif %}
                 </td>
-
             {% endfor %}
         </tr>
         <tr>
@@ -125,6 +125,7 @@
             <td></td>
             <td colspan="5">
                 <table>
+                    {#                todo: add column names in for from data_handler headers#}
                     <th>ID</th>
                     <th>SUBMISSION TIME</th>
                     <th>VOTES</th>

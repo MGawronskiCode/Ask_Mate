@@ -23,11 +23,11 @@
 {#            <a class="logo" href="new_index.html"><i class="fas fa-hamburger logo-icon"></i> AskMate</a>#}
 {#        </header>#}
 <div id="body">
-
     {% if session['username'] %}
-    <a href = "/logout">Sign out</a>
+        <a>{{ session['username'] }}</a>
+        <a href="/logout">Sign out</a>
     {% else %}
-    <p><a href="/register">Register</a> <a href=" /login">Sign in</a></p>
+        <p><a href="/register">Register</a> <a href=" /login">Sign in</a></p>
     {% endif %}
     {% block body %}
     {% endblock %}
