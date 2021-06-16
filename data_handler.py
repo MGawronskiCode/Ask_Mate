@@ -1,5 +1,6 @@
 from datetime import datetime
 
+# todo user tag useless, to delete (only user_question needed)
 import bcrypt
 from flask import request
 from psycopg2 import sql
@@ -337,40 +338,76 @@ def get_question_tags(cursor, question_id):
 
 
 @connection.connection_handler
-def add_tag(cursor, tag_name):
+def get_tag_id_by_tag_name(cursor, tag_name):
+    query = """
+        SELECT id from tag
+        where name like %s
+    """
+    query_params = [tag_name]
+    cursor.execute(query, query_params)
+
+    return cursor.fetchone()['id']
+
+
+@connection.connection_handler
+def add_tag(cursor, tag_name, question_id, session):
     tags = get_tags()
     tag_names = []
     for tag in tags:
         if tag['name'] not in tag_names:
             tag_names.append(tag['name'])
+    tag_id = get_tag_id_by_tag_name(tag_name)
     if tag_name not in tag_names:
         query = f"""
             INSERT INTO tag (name)
             VALUES (%s)
+            RETURNING id
         """
         query_params = [tag_name]
         cursor.execute(query, query_params)
+        tag_id = cursor.fetchone()['id']
+
+    user_id = session['user_id']
+    add_user_tag(user_id, tag_id)
+    add_question_tag(question_id, tag_id)
 
 
 @connection.connection_handler
-def add_tag_to_question(cursor, tag_name, question_id):
-    question_tags_names = get_question_tags(question_id)
-    question_tags = []
-    for tag_name in question_tags_names:
-        question_tags.append(get_tag_by_name(tag_name)[0])
-    question_tags_names = []
-    for question_tag in question_tags:
-        if question_tag['name'] not in question_tags_names:
-            question_tags_names.append(question_tag['name'])
+def add_user_tag(cursor, user_id, tag_id):
+    query = """
+        INSERT INTO user_tag (user_id, tag_id) VALUES (%s, %s)
+    """
+    query_params = [user_id, tag_id]
+    cursor.execute(query, query_params)
 
-    if tag_name not in question_tags_names:
-        query = f"""
-            INSERT INTO question_tag (question_id, tag_id)
-            VALUES (%s, %s)
-        """
-        tag = get_tag(tag_name)[0]
-        query_params = [question_id, tag['id']]
-        cursor.execute(query, query_params)
+
+@connection.connection_handler
+def add_question_tag(cursor, question_id, tag_id):
+    query = """
+    insert into question_tag (question_id, tag_id) VALUES (%s, %s)"""
+    query_params = [question_id, tag_id]
+    cursor.execute(query, query_params)
+
+
+# @connection.connection_handler
+# def add_tag_to_question(cursor, tag_name, question_id):
+#     question_tags_names = get_question_tags(question_id)
+#     question_tags = []
+#     for tag_name in question_tags_names:
+#         question_tags.append(get_tag_by_name(tag_name)[0])
+#     question_tags_names = []
+#     for question_tag in question_tags:
+#         if question_tag['name'] not in question_tags_names:
+#             question_tags_names.append(question_tag['name'])
+#
+#     if tag_name not in question_tags_names:
+#         query = f"""
+#             INSERT INTO question_tag (question_id, tag_id)
+#             VALUES (%s, %s)
+#         """
+#         tag = get_tag(tag_name)[0]
+#         query_params = [question_id, tag['id']]
+#         cursor.execute(query, query_params)
 
 
 @connection.connection_handler
@@ -592,3 +629,10 @@ def get_user_id_by_username(cursor, username):
     query_params = [username]
     cursor.execute(query, query_params)
     return cursor.fetchone()['id']
+
+
+@connection.connection_handler
+def get_all_user_data(cursor, user_id):
+    user_data = {}
+
+    query = ""

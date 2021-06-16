@@ -16,14 +16,9 @@
 
     {% if session['username'] %}
         <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
-        {% if session['user_id'] == question['user_id'] %}
             <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
             <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
-        {% endif %}
     {% endif %}
-
-
-
 
     <p>{% if tags %}
         tags:
@@ -31,10 +26,8 @@
             {{ tag }}
         {% endfor %}
     {% endif %}</p>
-    {% if session['user_id'] == question['user_id'] %}
         <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
         <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
-    {% endif %}
     <th><strong>
         Comment Section
     </strong></th>
@@ -46,7 +39,6 @@
             <tr>
             <td>{{ comment['submission_time'] }}</td>
             <td>{{ comment['message'] }}</td>
-            {#            todo: check id of the user who added comment, show links below only to this user#}
             <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
             <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
         {% endfor %}
@@ -63,22 +55,18 @@
                 {% if element == answer['vote_number'] %}
                     <td>
                         {{ element }}
-                        {% if session['username'] %}
                             <form action='/list/{{ question.id }}' method="POST">
                                 <button name="vote" value="upvote {{ answer['id'] }}">upvote</button>
                                 <button name="vote" value="downvote {{ answer['id'] }}">downvote</button>
                             </form>
-                        {% endif %}
                     </td>
                 {% else %}
                     <td>{{ element }}</td>
                 {% endif %}
             {% endfor %}
-            {% if session['username'] == answer['user_id'] %}
                 <td><a href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
                 <td><a href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
                 <td><a href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
-            {% endif %}
             </tr>
         {% endfor %}
 
@@ -94,11 +82,8 @@
             <tr>
                 <td>{{ comment['submission_time'] }}</td>
                 <td>{{ comment['message'] }}</td>
-                {#            todo: show links below only to user who added it (comment has user id)#}
-                {% if session['username'] == comment['user_id'] %}
                     <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
                     <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
-                {% endif %}
             </tr>
         {% endfor %}
 

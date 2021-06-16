@@ -242,14 +242,12 @@ def add_tag(question_id):
 
     if request.method == 'POST':
         if request.form['old_tag'] == 'new tag' and request.form['new_tag'] != '':
-            data_handler.add_tag(request.form['new_tag'])
-            data_handler.add_tag_to_question(request.form['new_tag'], question_id)
+            data_handler.add_tag(request.form['new_tag'], question_id, session)
+            # data_handler.add_tag_to_question(request.form['new_tag'], question_id)
         elif request.form['old_tag'] == 'new tag' and request.form['new_tag'] == '':
-            # flash('Please provide new tag name or choose from the list')
-            pass
+            flash('Please provide new tag name or choose from the list')
         else:
-            data_handler.add_tag(request.form['old_tag'])
-            data_handler.add_tag_to_question(request.form['old_tag'], question_id)
+            data_handler.add_tag(request.form['old_tag'], question_id, session)
         return redirect(url_for("show_question", question_id=question_id, session=session))
 
     return render_template('add_tag.html', question_id=question_id,
