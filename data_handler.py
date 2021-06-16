@@ -112,7 +112,7 @@ def vote(cursor, vote_value, object_id, object_type):
 def add_question(cursor, question_data_dict, session):
     sub_time = get_submission_time()
     user_id = get_user_id_by_username(session['username'])
-    query = ''' insert into question (submission_time, view_number, vote_number, title, message, image, user_id)
+    query = ''' insert into question (submission_time, view_number, vote_number, title, message, image)
     values(%s, 0, 0, %s, %s,%s, %s)
     RETURNING id;  
     '''

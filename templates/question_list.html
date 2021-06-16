@@ -48,19 +48,17 @@
         <div id="styled>">
         <table>
         {% for header in headers %}
-            {#            <th>{{ header.upper().replace('_', ' ') }}</th>#}
-            {{ header }}
+            <th>{{ header.upper() }}</th>
         {% endfor %}
         {% for question in search_questions %}
             <tr>
                 {% for key in question.keys() %}
                     <td>
-                        {% if key == 'image' %}
+                        {% if key != 'image' %}
+                            {{ question[key] }}
+                        {% else %}
                             <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
                         {% endif %}
-
-                        {{ question[key] }}
-
                         {% if key == 'vote_number' %}
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
