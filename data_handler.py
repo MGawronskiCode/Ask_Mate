@@ -633,7 +633,20 @@ def get_user_id_by_username(cursor, username):
 
 
 @connection.connection_handler
-def get_all_user_data(cursor, user_id):
+def get_all_added_by_user(cursor, user_id):
     user_data = {}
-    pass
-    query = ""
+    query_params = [user_id]
+
+    query = "select answer_id from user_answer where user_id = %s"
+    cursor.execute(query, query_params)
+    user_data['answer'] = cursor.fetchall()
+
+    query = "select comment_id from user_comment where user_id = %s"
+    cursor.execute(query, query_params)
+    user_data['comment'] = cursor.fetchall()
+
+    query = "select question_id from user_question where user_id = %s"
+    cursor.execute(query, query_params)
+    user_data['question'] = cursor.fetchall()
+
+    return user_data

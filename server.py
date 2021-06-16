@@ -1,5 +1,4 @@
-# przed dodaniem question, answer, comment, tag sprawdzić, czy jest zalogowany
-
+# todo: check if user already voted question/answer
 
 import os
 
@@ -67,6 +66,7 @@ def add_question():
             else:
                 question_data['image'] = ''
             question_id = data_handler.add_question(question_data, session)
+            # session['added_by_user'] = data_handler.get_all_added_by_user(session['user_id'])
             return redirect(url_for("show_question", question_id=question_id, session=session))
         else:
             return render_template("add_question.html", session=session)
@@ -393,6 +393,7 @@ def login_user():
                 flash(f'Login success!')
                 session['username'] = username
                 session['user_id'] = data_handler.get_user_id_by_username(username)
+                session['added_by_user'] = data_handler.get_all_added_by_user(session['user_id'])
                 return redirect(url_for("main_page"))
             flash("Incorrect login or password ")
             return redirect(url_for("login_user"))
@@ -419,6 +420,9 @@ def users():
 
     return render_template('list_users.html', users=user_list, headers=data_handler.USER_DATA_HEADERS, session=session)
 
+
+# todo actualise session['added_by_user'] every time he adds sfg, try to not download all info from db every time
+# todo increase counters in user_data (when user add an answer, increase this user answers_counter)
 
 # todo: add admin account
 

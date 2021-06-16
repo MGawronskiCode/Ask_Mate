@@ -41,8 +41,10 @@
                         {% if key == 'vote_number' %}
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
+                            {% if session['username'] %}
                                 <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
                                 <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                            {% endif %}
                             </form>
                         {% endif %}
                     </td>
