@@ -132,8 +132,17 @@ def add_question(cursor, question_data_dict, session):
     query_params = [sub_time, question_data_dict['title'], question_data_dict['message'], question_data_dict['image'],
                     user_id]
     cursor.execute(query, query_params)
-    question_id = cursor.fetchall()
-    return question_id[0]['id']
+
+    user_id = session['user_id']
+    question_id = cursor.fetchone()['id']
+    add_user_question(user_id, question_id)
+
+    return question_id
+
+
+@connection.connection_handler
+def add_user_question(cursor, user_id, question_id):
+    pass
 
 
 @connection.connection_handler
