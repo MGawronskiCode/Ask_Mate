@@ -345,8 +345,9 @@ def get_tag_id_by_tag_name(cursor, tag_name):
     """
     query_params = [tag_name]
     cursor.execute(query, query_params)
-
-    return cursor.fetchone()['id']
+    tag_id = cursor.fetchall()
+    if tag_id:
+        return tag_id[0]['id']
 
 
 @connection.connection_handler
@@ -634,5 +635,5 @@ def get_user_id_by_username(cursor, username):
 @connection.connection_handler
 def get_all_user_data(cursor, user_id):
     user_data = {}
-
+    pass
     query = ""

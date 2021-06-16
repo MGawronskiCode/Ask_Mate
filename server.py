@@ -223,7 +223,7 @@ def edit_answer(answer_id):
 def delete_tag(question_id):
     all_question_data = data_handler.get_question(question_id)[0]
     tags = data_handler.get_question_tags(question_id)
-
+    # todo delete tag should only delete question tag not tag from tag table
     if request.method == 'POST':
         tag_to_delete = request.form['tag_to_delete']
         data_handler.delete_tag_from_question(int(question_id), tag_to_delete)
