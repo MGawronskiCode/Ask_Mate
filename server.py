@@ -393,6 +393,7 @@ def login_user():
                 session['username'] = username
                 session['user_id'] = data_handler.get_user_id_by_username(username)
                 session['added_by_user'] = data_handler.get_all_added_by_user(session['user_id'])
+
                 return redirect(url_for("main_page"))
             flash("Incorrect login or password ")
             return redirect(url_for("login_user"))
@@ -400,7 +401,7 @@ def login_user():
     return render_template("login.html")
 
 
-@app.route("/logout", methods = ["GET", "POST"])
+@app.route("/logout", methods=["GET", "POST"])
 def logout_user():
 
     if request.method == "POST":

@@ -127,11 +127,10 @@ def add_question(cursor, question_data_dict, session):
     sub_time = get_submission_time()
     user_id = get_user_id_by_username(session['username'])
     query = ''' insert into question (submission_time, view_number, vote_number, title, message, image)
-    values(%s, 0, 0, %s, %s,%s, %s)
+    values(%s, 0, 0, %s, %s, %s)
     RETURNING id;  
     '''
-    query_params = [sub_time, question_data_dict['title'], question_data_dict['message'], question_data_dict['image'],
-                    user_id]
+    query_params = [sub_time, question_data_dict['title'], question_data_dict['message'], question_data_dict['image']]
     cursor.execute(query, query_params)
 
     user_id = session['user_id']
