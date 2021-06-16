@@ -56,8 +56,11 @@
             </tr>
         {% endfor %}
     </table>
+
     {% if session['username'] %}
-        <a href="/users">Show users list</a>
+        <a href="/users">Show users list</a><br>
+    {% else %}
+        <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
     {% endif %}
 {% endblock %}
 
