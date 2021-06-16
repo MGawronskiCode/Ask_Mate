@@ -8,8 +8,8 @@ import connection
 
 ANSWERS_DATA_PATH = 'sample_data/answer.csv'
 QUESTIONS_DATA_PATH = 'sample_data/question.csv'
-ANSWERS_DATA_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_DATA_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWERS_DATA_HEADERS = ['id', 'submission time', 'vote number', 'question id', 'message', 'image']
+QUESTIONS_DATA_HEADERS = ['id', 'submission time', 'view number', 'vote number', 'title', 'message', 'image']
 USER_DATA_HEADERS = ['ID', 'NAME', 'REGISTRATION DATE', 'ASKED QUESTIONS', 'ANSWERS', 'COMMENTS', 'REPUTATION']
 
 

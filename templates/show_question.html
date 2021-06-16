@@ -74,10 +74,11 @@
                     <td>{{ element }}</td>
                 {% endif %}
             {% endfor %}
+            {% if session['username'] == answer['user_id'] %}
                 <td><a href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
-
                 <td><a href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
                 <td><a href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
+            {% endif %}
             </tr>
         {% endfor %}
 
@@ -91,13 +92,16 @@
         <th>MESSAGE</th>
         {% for comment in answer_comments %}
             <tr>
-            <td>{{ comment['submission_time'] }}</td>
-            <td>{{ comment['message'] }}</td>
-            {#            todo: show links below only to user who added it#}
-            <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
-            <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+                <td>{{ comment['submission_time'] }}</td>
+                <td>{{ comment['message'] }}</td>
+                {#            todo: show links below only to user who added it (comment has user id)#}
+                {% if session['username'] == comment['user_id'] %}
+                    <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
+                    <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+                {% endif %}
+            </tr>
         {% endfor %}
-        </tr>
+
     </table>
 
     {% if session['username'] %}
