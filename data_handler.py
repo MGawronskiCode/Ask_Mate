@@ -492,15 +492,18 @@ def add_new_user(cursor, username, password):
     query_params = [username, password_hash, actual_date]
     cursor.execute(query, query_params)
 
-# @connection.connection_handler
 def validate_user( username, password):
     #returns bool
+    user_data =  check_if_username_exist(username)
+    hashed =user_data['password']
 
-    hashed = check_if_username_exist(username)['password']
     user_valid = bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
     return user_valid
 
-
+def get_user_id(username):
+    user_data = check_if_username_exist(username)
+    user_id = user_data['id']
+    return user_id
 
 
 

@@ -57,7 +57,6 @@ def add_question():
 
             prepared_image_data = "".join(image_storage_filepath_as_list)
             question_data['image'] = prepared_image_data.replace("\\", "/")
-            # image_storage_filepath.replace("\\", "/")
         else:
             question_data['image'] = ''
         question_id = data_handler.add_question(question_data)
@@ -385,6 +384,7 @@ def login_user():
             if data_handler.validate_user(username, password):
                 flash(f'You are logged in as {username}!')
                 session['username'] = username
+                session['user_id'] = data_handler.get_user_id(username)
                 return redirect(url_for("main_page"))
             flash("Incorrect login or password ")
             return redirect(url_for("login_user"))
@@ -397,24 +397,11 @@ def logout_user():
     if request.method == "POST":
         if request.form['logout'] == "yes":
             session.pop('username', None)
+            session.pop('user_id', None)
 
         return redirect(url_for("main_page"))
 
     return render_template("logout.html")
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         username = request.form['login']
-#         password = request.form['password']
-#     #       if check if the usrnme&pass correct:
-#     #           message about corect loging in
-#     #           return redirect(url_for('main_page'))
-#     #       else:
-#     #           message wrong login/password
-#     #           return redirect(url_for('login'))
-#
-#     return render_template('sql/login.html')
 
 
 if __name__ == "__main__":
