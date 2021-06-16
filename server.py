@@ -305,7 +305,7 @@ def add_question_comment(question_id):
     question = [full_data_question['title'], full_data_question['message']]
 
     if request.method == 'POST':
-        data_handler.sql_add_question_comment(question_id)
+        data_handler.sql_add_question_comment(question_id, session)
         return redirect(url_for("show_question", question_id=question_id, session=session))
     return render_template('add_comment.html', question_id=question_id, question=question, session=session)
 
@@ -317,7 +317,7 @@ def add_answer_comment(answer_id):
     question_id = full_data_answer['question_id']
 
     if request.method == 'POST':
-        data_handler.sql_add_answer_comment(answer_id)
+        data_handler.sql_add_answer_comment(answer_id, session)
         return redirect(url_for("show_question", question_id=question_id, session=session))
     return render_template('add_answer_comment.html', answer_id=answer_id,
                            answer=answer, question_id=question_id, session=session)

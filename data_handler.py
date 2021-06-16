@@ -398,29 +398,49 @@ def sql_get_answer_comments(cursor, answer_id):
 
 
 @connection.connection_handler
-def sql_add_answer_comment(cursor, answer_id):
+def sql_add_answer_comment(cursor, answer_id, session):
     comment = dict(request.form)['comment']
     # comment_id = create_id(answer_id)
     submission = get_submission_time()
     query = f'''
     INSERT INTO comment (answer_id, message, submission_time, edited_count)
-    VALUES ( %s, %s, %s, %s)
+    VALUES ( %s, %s, %s, 0)
+    RETURNING id
     '''
-    query_params = [answer_id, comment, submission, 0]
+    query_params = [answer_id, comment, submission]
+    cursor.execute(query, query_params)
+
+    user_id = session['user_id']
+    comment_id = cursor.fetchone()['id']
+    add_user_comment(user_id, comment_id)
+
+
+@connection.connection_handler
+def add_user_comment(cursor, user_id, comment_id):
+    query = """
+        INSERT INTO user_comment (user_id, comment_id) 
+        VALUES (%s, %s)
+    """
+    query_params = [user_id, comment_id]
     cursor.execute(query, query_params)
 
 
 @connection.connection_handler
-def sql_add_question_comment(cursor, question_id):
+def sql_add_question_comment(cursor, question_id, session):
     comment = dict(request.form)['comment']
     # comment_id = create_id(question_id)
     submission = get_submission_time()
     query = f'''
     INSERT INTO comment (question_id, message, submission_time, edited_count)
-    VALUES ( %s, %s, %s, %s)
+    VALUES ( %s, %s, %s, 0)
+    RETURNING id
     '''
-    query_params = [question_id, comment, submission, 0]
+    query_params = [question_id, comment, submission]
     cursor.execute(query, query_params)
+
+    user_id = session['user_id']
+    comment_id = cursor.fetchone()['id']
+    add_user_comment(user_id, comment_id)
 
 
 @connection.connection_handler

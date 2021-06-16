@@ -95,7 +95,7 @@
                         <img src="/static/{{ question['image'] }}" alt="" width=300>
                     {% endif %}
                     {{ question[key] }}
-
+                    {#todo: show vote buttoms only when logged#}
                     {% if key == 'vote_number' %}
                         <!--suppress HtmlUnknownTarget -->
                         <form action='/list' method="POST">
