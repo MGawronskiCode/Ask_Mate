@@ -282,7 +282,7 @@ def get_tag_uses_count(cursor, tag_id):
     query_params = [tag_id]
     cursor.execute(query, query_params)
 
-    return cursor.fetchall()
+    return cursor.fetchall()[0]['count']
 
 
 @connection.connection_handler
