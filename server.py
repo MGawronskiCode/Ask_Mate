@@ -427,7 +427,7 @@ def list_tags():
     all_tags = data_handler.get_tags()
     tag_with_uses_number = {}
     for tag in all_tags:
-        tag_with_uses_number[tag['name']] = data_handler.get_tag_uses_count(tag['id'])[0]['count']
+        tag_with_uses_number[tag['name']] = data_handler.get_tag_uses_count(tag['id'])
 
     return render_template('list_tags.html', tag_with_uses_number=tag_with_uses_number)
 
