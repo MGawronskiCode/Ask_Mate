@@ -422,6 +422,16 @@ def users():
     return render_template('list_users.html', users=user_list, headers=data_handler.USER_DATA_HEADERS, session=session)
 
 
+@app.route('/tags')
+def list_tags():
+    all_tags = data_handler.get_tags()
+    tag_with_uses_number = {}
+    for tag in all_tags:
+        tag_with_uses_number[tag['name']] = data_handler.get_tag_uses_count(tag['id'])[0]['count']
+
+    return render_template('list_tags.html', tag_with_uses_number=tag_with_uses_number)
+
+
 # todo actualise session['added_by_user'] every time he adds sfg, try to not download all info from db every time
 # todo increase counters in user_data (when user add an answer, increase this user answers_counter)
 
