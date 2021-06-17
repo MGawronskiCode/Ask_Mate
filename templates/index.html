@@ -64,6 +64,7 @@
     {% else %}
         <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
     {% endif %}
+    <a href="{{ url_for('list_tags') }}">Show tag list</a>
 {% endblock %}
 
 {% block footer %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Tags
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <table>
+        <th>TAG NAME</th>
+        <th>USED TIMES</th>
+        {% for key in tag_with_uses_number.keys() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ tag_with_uses_number[key] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
