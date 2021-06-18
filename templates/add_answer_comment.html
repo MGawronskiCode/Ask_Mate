@@ -7,9 +7,7 @@
         <title>Add answer</title>
     </head>
     <body>
-    <br>
-    ANSWER
-    <br>
+    <div class="container">
     <table>
         <tr>
             <td>{{ answer }}</td>
@@ -17,19 +15,20 @@
     </table>
     <br><br><br>
     <form method='POST'>
-        <p><label>ADD comment</label> <label>
+        <h3>Add comment:</h3>
+        <p><label>
             <input type="text" name='comment'/>
         </label></p>
-        <input type="submit" value="Reply">
+        <input type="submit" value="Submit">
     </form>
 
     <br><br>
     <div style="text-align: center;">
-        <a href="/list/{{ question_id }}">Back to the question</a><br><br>
+        <a class="simple_button" href="/list/{{ question_id }}">Back to the question</a><br><br>
         <!--suppress HtmlUnknownTarget -->
-        <a href="/list">Back to the questions list</a><br><br>
-        <a href="/">Back to the main page</a>
+    </div>
     </div>
     </body>
+    </div>
 {% endblock %}
 </html>

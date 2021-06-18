@@ -4,11 +4,15 @@
     Add question
 {% endblock %}
 
+
 {% block head %}
 
 {% endblock %}
 
+
+
 {% block body %}
+    <div class="container">
     <h3>Add new question:</h3>
     <!--suppress HtmlUnknownTarget -->
     <form action="/add-question" method="POST" enctype="multipart/form-data">
@@ -17,8 +21,9 @@
             <textarea name="message" rows="10" cols="70">Question</textarea>
         </label></p>
         <p><input type="file" name="image" accept="*.jpg *.png *.jpeg"></p>
-        <p><input type="submit" value="Add question"></p>
+        <p><input type="submit" value="Ask Mate!"></p>
     </form>
+    </div>
 {% endblock %}
 
 {% block footer %}

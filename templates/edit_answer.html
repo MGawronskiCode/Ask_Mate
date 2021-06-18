@@ -9,17 +9,18 @@
 {% endblock %}
 
 {% block body %}
+    <div class="container">
+    <h3>Edit your answer:</h3>
     <form action="/answer/{{ answer_id }}/edit" method="POST">
         <textarea name=message>{{ message }}</textarea>
         <p>
-            <button type="submit" name="save_cancel_button" value="save">Save</button>
+            <button type="submit" name="save_cancel_button" value="save">Submit</button>
         </p>
         <p>
             <button type="submit" name="save_cancel_button" value="cancel">Cancel</button>
         </p>
-
     </form>
-
+    </div>
 {% endblock body %}
 
 {% block footer %}

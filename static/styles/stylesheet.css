@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+    background-color: #F0F3F8;
+    font-family: 'Lato', sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+.highlight {
+  background-color: yellow;
+}
+h1 {
+    text-align: center;
+    background-color: #ffff;
+    padding: 20px;
+    margin: 0px;
+}
+.top_user {
+    background-color: #eee;
+    text-align: right;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.top_user a{
+    color: green;
+    text-decoration: none;
+    margin-left: 10px;
+}
+.container{
+    margin: 0 auto;
+    width: 90%;
+    background-color: #ffff;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-top: 30px;
+}
+.search_p{
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+input[type="search" i] {
+    appearance: auto;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+#search_submit{
+    display: block;
+    background: #a5a5aa;
+    color: #ffff;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+    width: 100%;
+    border: 1px black;
+    padding: 13px;
+    font-size: 15px;
+}
+#sort_submit{
+    display: block;
+    background: #000000;
+    color: #ffff;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50px;
+    width: 100%;
+    border: 1px solid green;
+    padding: 13px;
+    font-size: 15px;
+}
+.simple_button{
+    display: inline-block;
+    margin: 30px 5px;
+    padding: 10px 20px;
+    background: #4746BD;
+    color: #ffff;
+    text-decoration: none;
+    border-radius: 10px;
+}
+h2{
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeeeee;
+}
+th{
+    font-size:15px;
+    background: #eeeeee;
+    padding: 5px;
+}
+tr:hover{
+    background: #eeeeee;
+}
+td{
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+}
+.button_vote{
+    display: inline-block;
+    margin: 1px;
+    color: #ffff;
+    border-radius: 50%;
+    border: none;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+.question{
+    text-decoration: none;
+    color:green;
+    text-align:left;
+}
+.plus{
+    background-color: green;
+}
+.minus{
+    background-color: red;
+}
+.back{
+    display:block;
+    color:#ffff;
+    background:#000000;
+    padding: 20px 0px 20px 0px;
+    text-align: center;
+    text-decoration: none;
+    width:100%;
+    margin: 50px 0px 0px 0px;
+    bottom:0;
+}
+.quick_menu{
+    background: #000000;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+.quick_menu a{
+    padding: 5px 10px;
+    border: 1px solid #ffff;
+    margin: 0px 10px;
+    color:white;
+    text-decoration: none;
+    border-radius:7px;
+}
+.sort{
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 18px;
+    font-weight: bold;
+}
+table{
+    margin:0px;
+    padding: 0px;
+    width: 100%;
+    table-layout: fixed
+}
+.ID{
+    width:5%;
+}
+.submission_time{
+    width:10%;
+}
+.views{
+    width:10%;
+}
+.votes{
+    width:5%;
+}
+.title{
+    width:15%;
+}
+.message{
+    width:35%;
+}.image{
+    width:20%;
+}

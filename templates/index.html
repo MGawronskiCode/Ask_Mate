@@ -82,27 +82,36 @@
 {% endblock %}
 
 {% block body %}
-    <h1>AskMate</h1>
+    </div>
     <!--suppress HtmlUnknownTarget -->
+    <div class="container">
+    <p class="search_p">Search for phrase:</p>
     <form action='/search' method="get">
         <p><label>
             <input type="search" name="search_phrase" autofocus>
         </label></p>
         <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
     </form>
-    <p><a href="{{ url_for('list_questions') }}">Show all questions list</a></p>
+    <a class="simple_button" href="{{ url_for('list_questions') }}">Show all questions list</a>
     {% if session['username'] %}
-    <p><a href="{{ url_for('add_question') }}">Add new question</a></p>
+    <a class="simple_button" href="{{ url_for('add_question') }}">Add new question</a>
     {% else %}
-    <p><a href="{{ url_for('login_user') }}">Sign in to add new question</a></p>
+    <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new question</a>
     {% endif %}
 
     <h2>Latest questions:</h2>
 
     <table>
-        {% for header in headers %}
-            <th>{{ header.upper().replace('', ' ') }}</th>
-        {% endfor %}
+        <th class="ID">ID</th>
+        <th class="submission_time">Added on</th>
+        <th class="views">Views</th>
+        <th class="votes">Votes</th>
+        <th class="title">Title</th>
+        <th class="message">Message</th>
+        <th class="image">Image</th>
+{#        {% for header in headers %}#}
+{#            <th>{{ header.upper().replace('', ' ') }}</th>#}
+{#        {% endfor %}#}
         {% for question in user_questions %}
             <tr>
                 {% for key in question.keys() %}
@@ -115,8 +124,8 @@
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
                             {% if session['username'] %}
-                                <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
-                                <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                                <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+</button>
+                                <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">-</button>
                             {% endif %}
                             </form>
                         {% endif %}
@@ -124,9 +133,9 @@
                 {% endfor %}
             </tr>
             <tr>
-                <td colspan="4">
                 <td>
-                    <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><BR><br><br>
+                <td>
+                    <a class="question" href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><BR><br><br>
                 </td>
             </tr>
         {% endfor %}
@@ -135,7 +144,7 @@
 
     <a href="{{ url_for('list_tags') }}">Show tag list</a>
 {% endblock %}
-
+</div>
 {% block footer %}
 
 {% endblock %}

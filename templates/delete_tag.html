@@ -18,7 +18,10 @@
     {% endif %}
 {% endwith %}
 
+
+
 {% block body %}
+    <div class="container">
     <h3>{{ question['title'] }}</h3>
     <h4>{{ question['message'] }}</h4>
 
@@ -33,6 +36,7 @@
         </select></p>
         <p><input type="submit" value="Delete tag"></p>
     </form>
+    </div>
 {% endblock %}
 
 {% block footer %}

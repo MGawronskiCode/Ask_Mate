@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='/styles/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='/styles/stylesheet.css') }}">
     <title>{% block title %}{% endblock %}- AskMate</title>
-
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class=flashes>
@@ -14,29 +13,40 @@
             </ul>
         {% endif %}
     {% endwith %}
-
     {% block head %}
     {% endblock %}
 </head>
 <body>
-{#<header class="center-text">#}
-{#            <a class="logo" href="new_index.html"><i class="fas fa-hamburger logo-icon"></i> AskMate</a>#}
-{#        </header>#}
 <div id="body">
     {% if session['username'] %}
-        <a>{{ session['username'] }}</a>
+        <div class="top_user">
+        {{ session['username'] }}
         <a href="/logout">Sign out</a>
+        </div>
     {% else %}
         <p><a href="/register">Register</a> <a href=" /login">Sign in</a></p>
     {% endif %}
+    <h1>AskMate</h1>
+    <div class="quick_menu">
+        {% if session['username'] %}
+        <a href="/">Main page</a>
+        <a href="/users">Show users</a>
+        <a href="{{ url_for('add_question') }}">Add new question</a>
+        <a href="{{ url_for('list_questions') }}">Show all questions list</a>
+    {% else %}
+        <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
+    {% endif %}
+    </div>
     {% block body %}
     {% endblock %}
 </div>
-<div id="footer">
+</body>
+
+<footer>
+    <div id="footer">
+    <a class="back" href="/">Back to the main page</a>
+    </div>
     {% block footer %}
     {% endblock %}
-    <p><a href="/">Back to the main page</a></p>
-    <p>AskMate</p>
-</div>
-</body>
+</footer>
 </html>
