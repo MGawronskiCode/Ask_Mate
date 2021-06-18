@@ -278,6 +278,15 @@ def get_tags(cursor):
 
 
 @connection.connection_handler
+def get_tag_uses_count(cursor, tag_id):
+    query = "select count (question_id) from question_tag where tag_id = %s"
+    query_params = [tag_id]
+    cursor.execute(query, query_params)
+
+    return cursor.fetchall()[0]['count']
+
+
+@connection.connection_handler
 def get_tag_by_name(cursor, tag_name: str):
     query = f"""
         SELECT DISTINCT *
