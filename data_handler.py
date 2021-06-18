@@ -4,8 +4,7 @@ from datetime import datetime
 import bcrypt
 from flask import request
 from psycopg2 import sql
-import colorama
-from colorama import Fore, Style
+
 
 import connection
 
