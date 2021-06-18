@@ -9,19 +9,20 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Question:</h1>
+    <div class="container">
     <table>
         <tr>{% for element in question %}
-            <td>{{ element }} </td>
+            <p>{{ element }} </p>
         {% endfor %}
         </tr>
     </table>
-    <h2>Add new answer:</h2>
+    <h3>Add answer:</h3>
     <form method="POST" enctype="multipart/form-data">
         <p><label for="answer"></label><input type="text" name="answer" cols="50" id="answer" autofocus/></p>
         <p><input type="file" name="image" accept="*.jpg *.png *.jpeg"></p>
-        <p><input type="submit" value="Add answer"></p>
+        <p><input type="submit" value="Submit"></p>
     </form>
+    </div>
 {% endblock %}
 
 {% block footer %}

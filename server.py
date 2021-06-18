@@ -9,6 +9,8 @@ from flask import (
     redirect,
     url_for, flash, session
 )
+
+
 from werkzeug.utils import secure_filename
 
 import data_handler
@@ -260,6 +262,7 @@ def search():
 
     if request.args is not None:
         search_phrase = dict(request.args)['search_phrase']
+        highlight_search = data_handler.highlight_search(search_phrase)
         if search_phrase == '':
             return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                                    headers=data_handler.QUESTIONS_DATA_HEADERS, session=session)
@@ -290,7 +293,8 @@ def search():
             return render_template('question_list.html', search_questions=search_questions,
                                    search_questions_from_answers=search_questions_from_answers_no_duplicates,
                                    search_answers=search_answers, headers=data_handler.QUESTIONS_DATA_HEADERS,
-                                   answer_headers=data_handler.ANSWERS_DATA_HEADERS, session=session)
+                                   answer_headers=data_handler.ANSWERS_DATA_HEADERS, session=session,
+                                   search_phrase=search_phrase)
 
     return render_template('question_list.html', search_questions=search_questions, search_answers=[],
                            headers=data_handler.QUESTIONS_DATA_HEADERS, session=session)
@@ -421,7 +425,13 @@ def users():
 
     return render_template('list_users.html', users=user_list, headers=data_handler.USER_DATA_HEADERS, session=session)
 
+@app.route('/ax')
+def printuo():
+    kappa = 44
+    word = 'abcdefghijklmn'
+    highlight_search = data_handler.highlight_search(word)
 
+    return render_template('a.html', highlight_search=highlight_search, kappa=kappa)
 # todo actualise session['added_by_user'] every time he adds sfg, try to not download all info from db every time
 # todo increase counters in user_data (when user add an answer, increase this user answers_counter)
 

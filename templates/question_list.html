@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block title %}
     Question list
 {% endblock %}
@@ -15,41 +16,44 @@
     </script>
 
     <!--suppress HtmlUnknownTarget -->
-    <form action='/list' method="get">
-        <p>Sort by:</p>
-        <p>
+    <form class="container" action='/list' method="get">
+        <p class="sort">Sort by:</p>
             <label for="sort_column"></label>
             <input type="radio" id="sort_column" name="sort_column" value="title" required/> title
             <input type="radio" id="sort_column" name="sort_column" value="submission_time" required/> submission time
             <input type="radio" id="sort_column" name="sort_column" value="message" required/> message
             <input type="radio" id="sort_column" name="sort_column" value="view_number" required/> number of views
             <input type="radio" id="sort_column" name="sort_column" value="vote_number" required/> number of votes
-        </p>
-        <p>
+            <p class="sort">Sort method:</p>
             <label for="sort_method"></label>
             <input type="radio" id="sort_method" name="sort_method" value="ascending" required/> ascending
             <input type="radio" id="sort_method" name="sort_method" value="descending" required/> descending
-        </p>
+
         <p>
             <input type="submit" id="sort_submit" name="sort_submit" value="sort"/>
         </p>
     </form>
     <!--suppress HtmlUnknownTarget -->
-    <form action='/search' method="get">
-        <p><label>
+    <form class="container" action='/search' method="get">
+        <p class="search_p">Search for phrase:</p>
+        <label>
             <input type="search" name="search_phrase" autofocus>
-        </label></p>
+        </label>
         <p>
             <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
         </p>
     </form>
     {% if search_questions != [] %}
         {#            <div id="highlight" onload='styleWord(document.getElementById("highlight"), "How")'>#}
-        <div id="styled>">
+        <div class="container">
         <table>
-        {% for header in headers %}
-            <th>{{ header.upper() }}</th>
-        {% endfor %}
+        <th class="ID">ID</th>
+        <th class="submission_time">Added on</th>
+        <th class="views">Views</th>
+        <th class="votes">Votes</th>
+        <th class="title">Title</th>
+        <th class="message">Message</th>
+        <th class="image">Image</th>
         {% for question in search_questions %}
             <tr>
                 {% for key in question.keys() %}
@@ -63,24 +67,27 @@
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
                                 {% if session['username'] %}
-                                    <button name="vote" value="upvote {{ question['id'] }}">upvote</button>
-                                    <button name="vote" value="downvote {{ question['id'] }}">downvote</button>
+                                    <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+</button>
+                                    <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">-</button>
                                 {% endif %}
                             </form>
                         {% endif %}
+{#                        {% if key == 'message' %}#}
+{#                            <mark>search_phrase</mark>#}
+{#                        {% endif %}#}
                     </td>
                 {% endfor %}
             </tr>
             <tr>
-                <td colspan="4"></td>
+                <td colspan="0"></td>
                 <td>
-                    <a href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><br><br><br>
+                    <a class="question" href="/list/{{ question['id'] }}">Go to {{ question[id] }} question</a><br><br><br>
                 </td>
             </tr>
         {% endfor %}
+        <p></p>
     {% endif %}
-<p></p>
-{% if search_answers != [] %}
+    {% if search_answers != [] %}
     {% if search_questions == [] %}
         {% for header in headers %}
             <th>{{ header.upper().replace('_', ' ') }}</th>
@@ -156,10 +163,10 @@
             </td>
         </tr>
     {% endfor %}
-    </table></div>
+    </table>
     {#        </div>#}
 {% endif %}
 {% endblock %}
-
+    </div>
 {% block footer %}
 {% endblock %}

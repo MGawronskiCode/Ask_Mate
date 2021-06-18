@@ -4,6 +4,8 @@ from datetime import datetime
 import bcrypt
 from flask import request
 from psycopg2 import sql
+import colorama
+from colorama import Fore, Style
 
 import connection
 
@@ -661,3 +663,9 @@ def get_all_added_by_user(cursor, user_id):
     user_data['question'] = questions_ids
 
     return user_data
+
+
+def highlight_search(search_phrase):
+    highlighted_phrase = Fore.RED + search_phrase
+    return highlighted_phrase
+

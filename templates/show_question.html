@@ -9,20 +9,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Question</h1>
-    <h3>{{ question['title'] }}</h3>
+    <div class="container"><h3>{{ question['title'] }}</h3>
     <p>{{ question['message'] }}</p>
     <img class="image" src="/static/{{ question.image }}" alt="" width=300>
-
     {% if session['username'] %}
-        <p><a href="/question/{{ question.id }}/new-comment">Add comment</a></p>
+        <a class="simple_button" href="/question/{{ question.id }}/new-comment">Add comment</a>
+        <a class="simple_button" href="/list/{{ question.id }}/new-answer">Add an answer</a>
     {% else %}
-        <p><a href="{{ url_for('login_user') }}">Sign in to add comment</a></p>
+        <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add comment</a>
+        <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new answer</a>
     {% endif %}
     {% if question['id'] in session['added_by_user']['question'] %}
-        <p><a href="/question/{{ question.id }}/edit">Edit question</a></p>
-        <p><a href="/question/{{ question.id }}/delete">Delete question</a></p>
+        <a class="simple_button" href="/question/{{ question.id }}/edit">Edit question</a>
+        <a class="simple_button" href="/question/{{ question.id }}/delete">Delete question</a>
     {% endif %}
+
 
     <p>{% if tags %}
         tags:
@@ -31,24 +32,23 @@
         {% endfor %}
     {% endif %}</p>
     {% if question['id'] in session['added_by_user']['question'] %}
-        <p><a href="/question/{{ question.id }}/new-tag">Add new tag</a></p>
-        <p><a href="/question/{{ question.id }}/delete-tag">Delete tag</a></p>
+        <a class="simple_button" href="/question/{{ question.id }}/new-tag">Add new tag</a>
+        <a class="simple_button" href="/question/{{ question.id }}/delete-tag">Delete tag</a>
+        <br><br>
     {% endif %}
-    <th><strong>
-        Comment Section
-    </strong></th>
+    <h3 style="text-align:center">Comment Section</h3>
     <br><br>
-    <table>
-        <th>SUBMISSION TIME</th>
-        <th>MESSAGE</th>
+    <table class="content-table">
+        <th class="submission_time">Added on</th>
+        <th class="message">Message</th>
         {% for comment in question_comments %}
             <tr>
             <td>{{ comment['submission_time'] }}</td>
             <td>{{ comment['message'] }}</td>
             {#            todo doesnt work if below (edit/delete link visible to all)#}
             {% if comment['id'] in session['added_by_user']['comment'] %}
-                <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
-                <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+                <td><a class="simple_button" href="/comment/{{ comment['id'] }}/edit">edit</a></td>
+                <td><a class="simple_button" href="/comment/{{ comment['id'] }}/delete">delete</a></td>
             {% endif %}
         {% endfor %}
         </tr>
@@ -56,9 +56,15 @@
     <br><br><br><br><br><br><br><br>
     <h2>Answers</h2>
     <table>
-        {% for header in headers %}
-            <th>{{ header.upper().replace('', ' ') }}</th>
-        {% endfor %}
+        <th class="ID">ID</th>
+        <th class="submission_time">Added on</th>
+        <th class="votes">Votes</th>
+        <th class="ID">Question ID</th>
+        <th>Message</th>
+        <th class="image">Image</th>
+{#        {% for header in headers %}#}
+{#            <th>{{ header.upper().replace('', ' ') }}</th>#}
+{#        {% endfor %}#}
         {% for answer in answers %}
             <tr> {% for element in answer.values() %}
                 {% if element == answer['vote_number'] %}
@@ -66,8 +72,8 @@
                         {{ element }}
                         <form action='/list/{{ question.id }}' method="POST">
                             {% if session['username'] %}
-                                <button name="vote" value="upvote {{ answer['id'] }}">upvote</button>
-                                <button name="vote" value="downvote {{ answer['id'] }}">downvote</button>
+                                <button class="button_vote plus" name="vote" value="upvote {{ answer['id'] }}">+</button>
+                                <button class="button_vote minus" name="vote" value="downvote {{ answer['id'] }}">-</button>
                             {% endif %}
                         </form>
                     </td>
@@ -76,42 +82,35 @@
                 {% endif %}
             {% endfor %}
                 {% if session['username'] %}
-                    <td><a href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
+                    <td><a class="simple_button" href="/answer/{{ answer['id'] }}/new-comment">Add comment</a></td>
                 {% endif %}
                 {% if answer['id'] in session['added_by_user']['answer'] %}
-                    <td><a href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
-                    <td><a href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
+                    <td><a class="simple_button" href="/answer/{{ answer['id'] }}/edit">Edit</a></td>
+                    <td><a class="simple_button" href="/answer/{{ answer['id'] }}/delete">Delete</a></td>
                 {% endif %}
             </tr>
         {% endfor %}
     </table>
-    <th><strong>
-        Comments
-    </strong></th>
+        <h3 style="text-align:center">Comment Section</h3>
     <br><br>
     <table>
-        <th>SUBMISSION TIME</th>
-        <th>MESSAGE</th>
+        <th class="submission_time">Added on</th>
+        <th class="message">Message</th>
         {% for comment in answer_comments %}
             <tr>
                 <td>{{ comment['submission_time'] }}</td>
                 <td>{{ comment['message'] }}</td>
                 {% if comment['id'] in session['added_by_user']['comments'] %}
-                    <td><a href="/comment/{{ comment['id'] }}/edit">edit</a></td>
-                    <td><a href="/comment/{{ comment['id'] }}/delete">delete</a></td>
+                    <td><a class="simple_button" href="/comment/{{ comment['id'] }}/edit">edit</a></td>
+                    <td><a class="simple_button" href="/comment/{{ comment['id'] }}/delete">delete</a></td>
                 {% endif %}
             </tr>
         {% endfor %}
 
     </table>
+        <!--suppress HtmlUnknownTarget -->
 
-    {% if session['username'] %}
-        <p><a href="/list/{{ question.id }}/new-answer">Add an answer</a></p>
-    {% else %}
-        <p><a href="{{ url_for('login_user') }}">Sign in to add new answer</a></p>
-    {% endif %}
-    <p><!--suppress HtmlUnknownTarget -->
-        <a href="/list">Back to the questions list</a></p>
+    </div>
 {% endblock %}
 
 {% block footer %}

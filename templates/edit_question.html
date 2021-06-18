@@ -9,7 +9,8 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Edit your question:</h2>
+    <div class="container">
+    <h3>Edit your question:</h3>
     <form action="/question/{{ question_id }}/edit" method="post">
         <p><label>
             <textarea name="title" id="title" cols="50" autofocus>{{ title }}</textarea>
@@ -17,9 +18,11 @@
         <p><label>
             <textarea name="message">{{ message }}</textarea>
         </label></p>
-        <p><input type="submit" value="Save"></p>
-        <p><input type="submit" value="Cancel"></p>
+        <p><input type="submit" value="Submit"></p>
+        <div style="text-align: center;"><p><a class="simple_button" href="{{ url_for('show_question',question_id=question_id) }}"> Back to question </a></p></div>
+    </div>
     </form>
+    </div>
 {% endblock %}
 
 {% block footer %}
