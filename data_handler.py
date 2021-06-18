@@ -5,7 +5,6 @@ import bcrypt
 from flask import request
 from psycopg2 import sql
 
-
 import connection
 
 ANSWERS_DATA_PATH = 'sample_data/answer.csv'
@@ -624,7 +623,7 @@ def validate_user(username, password):
 @connection.connection_handler
 def get_users(cursor):
     query = """
-        SELECT username, registration_date
+        SELECT id, username, registration_date
         FROM "user"
     """
     cursor.execute(query)
@@ -673,9 +672,3 @@ def get_all_added_by_user(cursor, user_id):
     user_data['question'] = questions_ids
 
     return user_data
-
-
-def highlight_search(search_phrase):
-    highlighted_phrase = Fore.RED + search_phrase
-    return highlighted_phrase
-
