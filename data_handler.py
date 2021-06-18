@@ -142,7 +142,9 @@ def add_question(cursor, question_data_dict, session):
 
 @connection.connection_handler
 def add_user_question(cursor, user_id, question_id):
-    pass
+    query = "insert into user_question (user_id, question_id) values (%s, %s)"
+    query_params = [user_id, question_id]
+    cursor.execute(query, query_params)
 
 
 @connection.connection_handler
@@ -621,7 +623,7 @@ def validate_user(username, password):
 @connection.connection_handler
 def get_users(cursor):
     query = """
-        SELECT id, username, registration_date, asked_questions, answers, comments, reputation
+        SELECT username, registration_date
         FROM "user"
     """
     cursor.execute(query)

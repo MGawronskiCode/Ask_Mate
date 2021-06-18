@@ -418,8 +418,10 @@ def logout_user():
 @app.route('/users')
 def users():
     user_list = data_handler.get_users()
+    headers = ["USER NAME", "REGISTRATION DATE", "ASKED QUESTIONS", "ADDED ANSWERS", "ADDED COMMENTS"]
+    # user_list.append()
 
-    return render_template('list_users.html', users=user_list, headers=data_handler.USER_DATA_HEADERS, session=session)
+    return render_template('list_users.html', users=user_list, headers=headers, session=session)
 
 
 @app.route('/tags')
