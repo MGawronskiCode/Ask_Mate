@@ -10,22 +10,25 @@
 
 {% block body %}
     <div class="container">
-    <table>
-        {% for header in headers %}
-            <th>
-                {{ header }}
-            </th>
-        {% endfor %}
-        {% for user in users %}
-            <tr>
-                {% for key in user.keys() %}
-                    <td>
-                        {{ user[key] }}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
+        <table>
+            {% for header in headers %}
+                <th>
+                    {{ header }}
+                </th>
+            {% endfor %}
+            {% for user in users %}
+                <tr>
+                    {% for key in user.keys() %}
+                        {% if key != 'username' and key != 'id' %}
+                            <td>{{ user[key] }}</td>
+                        {% elif key == 'username' %}
+                            {#                        todo: hrev url to user page (use user['id']) #}
+                            <td><a href="{{ url_for('main_page') }}">{{ user[key] }}</a></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}
 
