@@ -19,12 +19,14 @@
         </label></p>
         <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
     </form>
-    <a class="simple_button" href="{{ url_for('list_questions') }}">Show all questions list</a>
-    {% if session['username'] %}
-    <a class="simple_button" href="{{ url_for('add_question') }}">Add new question</a>
-    {% else %}
-    <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new question</a>
-    {% endif %}
+    <br><br>
+{#    <a class="simple_button" href="{{ url_for('list_questions') }}">Show all questions</a>#}
+{#    {% if session['username'] %}#}
+{#    <a class="simple_button" href="{{ url_for('add_question') }}">Add a question</a>#}
+{#    {% else %}#}
+{#    <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new question</a>#}
+{#    {% endif %}#}
+{#    <a class="simple_button" href="{{ url_for('list_tags') }}">Show all tags</a>#}
 
     <h2>Latest questions:</h2>
 
@@ -36,24 +38,28 @@
         <th class="title">Title</th>
         <th class="message">Message</th>
         <th class="image">Image</th>
-{#        {% for header in headers %}#}
-{#            <th>{{ header.upper().replace('', ' ') }}</th>#}
-{#        {% endfor %}#}
+        {#        {% for header in headers %}#}
+        {#            <th>{{ header.upper().replace('', ' ') }}</th>#}
+        {#        {% endfor %}#}
         {% for question in user_questions %}
             <tr>
                 {% for key in question.keys() %}
                     <td>
-                        {% if key == 'image' %}
+                        {% if key != 'image' %}
+                            {{ question[key] }}
+                        {% else %}
                             <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
                         {% endif %}
-                        {{ question[key] }}
                         {% if key == 'vote_number' %}
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
-                            {% if session['username'] %}
-                                <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+</button>
-                                <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">-</button>
-                            {% endif %}
+                                {% if session['username'] %}
+                                    <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+
+                                    </button>
+                                    <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">
+                                        -
+                                    </button>
+                                {% endif %}
                             </form>
                         {% endif %}
                     </td>
@@ -67,7 +73,6 @@
             </tr>
         {% endfor %}
     </table>
-
 
     <a href="{{ url_for('list_tags') }}">Show tag list</a>
 {% endblock %}

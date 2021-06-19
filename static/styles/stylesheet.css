@@ -5,6 +5,7 @@ body {
     font-family: 'Lato', sans-serif;
     margin: 0px;
     padding: 0px;
+    margin-bottom: 100px;
 }
 .highlight {
   background-color: yellow;
@@ -29,7 +30,7 @@ h1 {
 }
 .container{
     margin: 0 auto;
-    width: 90%;
+    width: 65%;
     background-color: #ffff;
     box-sizing: border-box;
     padding: 20px;
@@ -53,7 +54,7 @@ input[type="search" i] {
 }
 #search_submit{
     display: block;
-    background: #a5a5aa;
+    background: #4CA87B;
     color: #ffff;
     font-weight: bold;
     text-align: center;
@@ -71,9 +72,16 @@ input[type="search" i] {
     text-align: center;
     border-radius: 50px;
     width: 100%;
-    border: 1px solid green;
+    border: 1px black;
     padding: 13px;
     font-size: 15px;
+}
+#footer{
+    background:#ffffff;
+    width:100%;
+    position:fixed;
+    left:0;
+    bottom:0;
 }
 .simple_button{
     display: inline-block;
@@ -84,6 +92,18 @@ input[type="search" i] {
     text-decoration: none;
     border-radius: 10px;
 }
+
+.back_button{
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    background: #000000;
+    color: #ffff;
+    text-decoration: none;
+    border-radius: 10px;
+    /*text-align:center;*/
+}
+
 h2{
     text-align: center;
     padding-bottom: 10px;
@@ -140,6 +160,10 @@ td{
     color: white;
     padding: 15px;
     text-align: center;
+}
+.sticky{
+    position: sticky;
+    top: 0;
 }
 .quick_menu a{
     padding: 5px 10px;

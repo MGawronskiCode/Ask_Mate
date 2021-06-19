@@ -27,12 +27,13 @@
         <p><a href="/register">Register</a> <a href=" /login">Sign in</a></p>
     {% endif %}
     <h1>AskMate</h1>
-    <div class="quick_menu">
+    <div class="quick_menu sticky">
         {% if session['username'] %}
         <a href="/">Main page</a>
         <a href="/users">Show users</a>
-        <a href="{{ url_for('add_question') }}">Add new question</a>
-        <a href="{{ url_for('list_questions') }}">Show all questions list</a>
+        <a href="{{ url_for('add_question') }}">Ask a question</a>
+        <a href="{{ url_for('list_questions') }}">All questions</a>
+        <a href="{{ url_for('list_tags') }}">Tags list</a>
     {% else %}
         <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
     {% endif %}
@@ -43,8 +44,8 @@
 </body>
 
 <footer>
-    <div id="footer">
-    <a class="back" href="/">Back to the main page</a>
+    <div style="text-align: center;" id="footer">
+    <a class="back_button" href="/">Back to the main page</a>
     </div>
     {% block footer %}
     {% endblock %}
