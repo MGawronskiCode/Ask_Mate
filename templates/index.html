@@ -38,24 +38,28 @@
         <th class="title">Title</th>
         <th class="message">Message</th>
         <th class="image">Image</th>
-{#        {% for header in headers %}#}
-{#            <th>{{ header.upper().replace('', ' ') }}</th>#}
-{#        {% endfor %}#}
+        {#        {% for header in headers %}#}
+        {#            <th>{{ header.upper().replace('', ' ') }}</th>#}
+        {#        {% endfor %}#}
         {% for question in user_questions %}
             <tr>
                 {% for key in question.keys() %}
                     <td>
-                        {% if key == 'image' %}
+                        {% if key != 'image' %}
+                            {{ question[key] }}
+                        {% else %}
                             <img src="/static/{{ question['image'] }}" alt="" width=150 height=100>
                         {% endif %}
-                        {{ question[key] }}
                         {% if key == 'vote_number' %}
                             <!--suppress HtmlUnknownTarget -->
                             <form action='/list' method="POST">
-                            {% if session['username'] %}
-                                <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+</button>
-                                <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">-</button>
-                            {% endif %}
+                                {% if session['username'] %}
+                                    <button class="button_vote plus" name="vote" value="upvote {{ question['id'] }}">+
+                                    </button>
+                                    <button class="button_vote minus" name="vote" value="downvote {{ question['id'] }}">
+                                        -
+                                    </button>
+                                {% endif %}
                             </form>
                         {% endif %}
                     </td>
