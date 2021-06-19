@@ -19,12 +19,14 @@
         </label></p>
         <button type="submit" id="search_submit" name="search_submit" value="true">Search</button>
     </form>
-    <a class="simple_button" href="{{ url_for('list_questions') }}">Show all questions list</a>
-    {% if session['username'] %}
-    <a class="simple_button" href="{{ url_for('add_question') }}">Add new question</a>
-    {% else %}
-    <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new question</a>
-    {% endif %}
+    <br><br>
+{#    <a class="simple_button" href="{{ url_for('list_questions') }}">Show all questions</a>#}
+{#    {% if session['username'] %}#}
+{#    <a class="simple_button" href="{{ url_for('add_question') }}">Add a question</a>#}
+{#    {% else %}#}
+{#    <a class="simple_button" href="{{ url_for('login_user') }}">Sign in to add new question</a>#}
+{#    {% endif %}#}
+{#    <a class="simple_button" href="{{ url_for('list_tags') }}">Show all tags</a>#}
 
     <h2>Latest questions:</h2>
 
@@ -68,12 +70,7 @@
         {% endfor %}
     </table>
 
-    {% if session['username'] %}
-        <a href="/users">Show users list</a><br>
-    {% else %}
-        <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
-    {% endif %}
-    <a href="{{ url_for('list_tags') }}">Show tag list</a>
+
 {% endblock %}
 </div>
 {% block footer %}

@@ -12,6 +12,7 @@
     <div class="container"><h3>{{ question['title'] }}</h3>
     <p>{{ question['message'] }}</p>
     <img class="image" src="/static/{{ question.image }}" alt="" width=300>
+    <br><br>
     {% if session['username'] %}
         <a class="simple_button" href="/question/{{ question.id }}/new-comment">Add comment</a>
         <a class="simple_button" href="/list/{{ question.id }}/new-answer">Add an answer</a>
