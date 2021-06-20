@@ -203,6 +203,17 @@ table{
 }
 .message{
     width:35%;
-}.image{
+}
+.image{
     width:20%;
+}
+
+ .logon_panel{
+    display: inline-block;
+    margin: 10px 0px 10px 10px;
+    padding: 4px 6px;
+    background: #4746BD;
+    color: #ffff;
+    text-decoration: none;
+    border-radius: 7px;
 }
