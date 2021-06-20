@@ -5,7 +5,6 @@ body {
     font-family: 'Lato', sans-serif;
     margin: 0px;
     padding: 0px;
-    margin-bottom: 100px;
 }
 .highlight {
   background-color: yellow;
@@ -42,7 +41,7 @@ h1 {
     font-weight: bold;
     margin-bottom: 10px;
 }
-input[type="search" i] {
+input[type="search"] {
     appearance: auto;
     box-sizing: border-box;
     padding: 10px;
@@ -76,13 +75,13 @@ input[type="search" i] {
     padding: 13px;
     font-size: 15px;
 }
-#footer{
-    background:#ffffff;
-    width:100%;
-    position:fixed;
-    left:0;
-    bottom:0;
-}
+/*#footer{*/
+/*    background:#ffffff;*/
+/*    width:100%;*/
+/*    position:fixed;*/
+/*    left:0;*/
+/*    bottom:0;*/
+/*}*/
 .simple_button{
     display: inline-block;
     margin: 30px 5px;
@@ -102,6 +101,8 @@ input[type="search" i] {
     text-decoration: none;
     border-radius: 10px;
     /*text-align:center;*/
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 h2{
