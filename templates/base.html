@@ -35,7 +35,10 @@
         <a href="{{ url_for('list_questions') }}">All questions</a>
         <a href="{{ url_for('list_tags') }}">Tags list</a>
     {% else %}
+        <a href="/">Main page</a>
+        <a href="{{ url_for('login_user') }}">Sign in to ask a question</a>
         <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
+        <a href="{{ url_for('list_questions') }}">All questions</a>
     {% endif %}
     </div>
     {% block body %}
