@@ -101,7 +101,7 @@
             <tr>
                 <td>{{ comment['submission_time'] }}</td>
                 <td>{{ comment['message'] }}</td>
-                {% if comment['id'] in session['added_by_user']['comments'] %}
+                {% if comment['id'] in session['added_by_user']['comment'] %}
                     <td><a class="simple_button" href="/comment/{{ comment['id'] }}/edit">edit</a></td>
                     <td><a class="simple_button" href="/comment/{{ comment['id'] }}/delete">delete</a></td>
                 {% endif %}

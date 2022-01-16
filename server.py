@@ -21,11 +21,12 @@ VOTE_TYPES = {'upvote': 1, 'downvote': -1}
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # maksymalny akceptowany rozmiar pliku: 8mb
+app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024  # max file size: 8mb
 
 
 def file_extension_acceptable(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route("/")
 def main_page():
@@ -50,9 +51,6 @@ def add_question():
 
             if image_data.values() != "<FileStorage: '' ('application/octet-stream')>":
                 image = request.files['image']
-                # if not file_extension_acceptable(image.filename):
-                #     flash('Unsupported file format')
-                #     return redirect(request.url)
                 sanitized_filename = secure_filename(image.filename)
                 image_storage_filepath = os.path.join(UPLOAD_FOLDER, sanitized_filename)
                 image.save(image_storage_filepath)
@@ -61,16 +59,18 @@ def add_question():
 
                 prepared_image_data = "".join(image_storage_filepath_as_list)
                 question_data['image'] = prepared_image_data.replace("\\", "/")
-                # image_storage_filepath.replace("\\", "/")
+
             else:
                 question_data['image'] = ''
             question_id = data_handler.add_question(question_data, session)
-            # session['added_by_user'] = data_handler.get_all_added_by_user(session['user_id'])
+
             return redirect(url_for("show_question", question_id=question_id, session=session))
         else:
+
             return render_template("add_question.html", session=session)
     else:
         flash('you have to be logged in to add new question')
+
         return redirect(url_for('main_page', session=session))
 
 
@@ -78,15 +78,14 @@ def add_question():
 def delete_question(question_id):
     if request.method == "POST":
         if request.form["you_sure_button"] == "Yes":
-            
             data_handler.delete_question(question_id)
 
             return redirect(url_for("list_questions", session=session))
 
         elif request.form["you_sure_button"] == "No":
             return redirect(url_for("show_question", question_id=question_id, session=session))
-
     else:
+
         return render_template("delete.html", question_id=question_id, session=session)
 
 
@@ -112,6 +111,7 @@ def sort():
     else:
         sort_column = request.args.get('sort_column')
         sort_method = request.args.get('sort_method')
+
     return sort_column, sort_method
 
 
@@ -362,6 +362,7 @@ def delete_comment(comment_id):
 def register():
     if request.method == 'POST':
         username = request.form['login']
+
         if data_handler.check_if_username_exist(username):
             flash('Account associated with this email already exists, log into your account!')
             return redirect('login')
@@ -379,13 +380,14 @@ def register():
     return render_template('register.html')
 
 
-@app.route("/login", methods = ["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login_user():
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
         if 'username' in session:
             flash("You are already logged in!")
+
             return redirect(url_for("main_page"))
         else:
             if data_handler.validate_user(username, password):
@@ -396,6 +398,7 @@ def login_user():
 
                 return redirect(url_for("main_page"))
             flash("Incorrect login or password ")
+
             return redirect(url_for("login_user"))
 
     return render_template("login.html")
@@ -403,7 +406,6 @@ def login_user():
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout_user():
-
     if request.method == "POST":
         if request.form['logout'] == "yes":
             session.pop('username', None)

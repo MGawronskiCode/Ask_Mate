@@ -20,8 +20,8 @@
 <div id="body">
     {% if session['username'] %}
         <div class="top_user">
-        {{ session['username'] }}
-        <a href="/logout">Sign out</a>
+            {{ session['username'] }}
+            <a href="/logout">Sign out</a>
         </div>
     {% else %}
         <a class="logon_panel" href="/register">Register</a> <a class="logon_panel" href=" /login">Sign in</a>
@@ -29,17 +29,17 @@
     <h1>AskMate</h1>
     <div class="quick_menu sticky">
         {% if session['username'] %}
-        <a href="/">Main page</a>
-        <a href="/users">Show users</a>
-        <a href="{{ url_for('add_question') }}">Ask a question</a>
-        <a href="{{ url_for('list_questions') }}">All questions</a>
-        <a href="{{ url_for('list_tags') }}">Tags list</a>
-    {% else %}
-        <a href="/">Main page</a>
-        <a href="{{ url_for('login_user') }}">Sign in to ask a question</a>
-        <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
-        <a href="{{ url_for('list_questions') }}">All questions</a>
-    {% endif %}
+            <a href="/">Main page</a>
+            <a href="/users">Show users</a>
+            <a href="{{ url_for('add_question') }}">Ask a question</a>
+            <a href="{{ url_for('list_questions') }}">All questions</a>
+            <a href="{{ url_for('list_tags') }}">Tags list</a>
+        {% else %}
+            <a href="/">Main page</a>
+            <a href="{{ url_for('login_user') }}">Sign in to ask a question</a>
+            <a href="{{ url_for('login_user') }}">Sign in to see users list</a>
+            <a href="{{ url_for('list_questions') }}">All questions</a>
+        {% endif %}
     </div>
     {% block body %}
     {% endblock %}
@@ -48,7 +48,7 @@
 
 <footer>
     <div style="text-align: center;" id="footer">
-    <a class="back_button" href="/">Back to the main page</a>
+        <a class="back_button" href="/">Back to the main page</a>
     </div>
     {% block footer %}
     {% endblock %}

@@ -1,35 +1,7 @@
-# import csv
 import os
 
 import psycopg2
 import psycopg2.extras
-
-
-#
-#
-# def read_data_from_file(file_name):
-#     data_list = []
-#     try:
-#         with open(file_name, 'r') as file:
-#             reader = csv.DictReader(file)
-#             for row in reader:
-#                 data_list.append(row)
-#         return data_list
-#     except IOError:
-#         return "IOError"
-#
-#
-# def write_data_to_file(file_name, fieldnames, data_to_add, mode='a', separator=','):
-#     if mode == 'a':
-#         with open(file_name, mode) as file:
-#             writer = csv.DictWriter(file, fieldnames, delimiter=",")  # fieldnames=DATA_HEADER
-#             writer.writerow(data_to_add)
-#     elif mode == 'w':
-#         with open(file_name, mode) as file:
-#             writer = csv.DictWriter(file, fieldnames=fieldnames, delimiter=separator)  # fieldnames=DATA_HEADER
-#             writer.writeheader()
-#             writer.writerows(data_to_add)
-#
 
 
 def get_connection_string():
