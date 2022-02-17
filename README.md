@@ -1,9 +1,9 @@
 # Ask_Mate
 
-Website similar to the popular Stack Overflow. 
-Written in Flask, using a database and SQL. 
+A website similar to the popular Stack Overflow.
+Written in two two-week sprints in Flask, using a database and SQL.
 In the database, we have users whose data is secured with BCrypt and all information about users' questions and answers.
-Registered user have access to multiple options like voting, adding questions, answers, comments and managing his own content.
+The logged in user has access to many options, such as voting, adding questions, answers, comments and managing his own content.
 
 
 
