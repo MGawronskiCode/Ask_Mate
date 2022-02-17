@@ -9,8 +9,11 @@ The logged in user has access to many options, such as voting, adding questions,
 
 ![alt text](https://i.imgur.com/CgSm5iZ.png)
 
+
 ![alt text](https://i.imgur.com/ibE9CBj.png)
 
+
 ![alt text](https://i.imgur.com/geMJXj3.png)
+
 
 ![alt text](https://i.imgur.com/FymbfEJ.png)
